@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>OTA Admin • Login Logs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+:root{
+  --bg:#f6f7fb;
+  --panel:#ffffff;
+  --text:#0b1220;
+  --muted:#5b677a;
+  --border:#e7edf6;
+  --border2:#dbe5f4;
+  --brand:#2f66ff;
+  --brand2:#1f4ed8;
+  --ok:#16a34a;
+  --bad:#dc2626;
+  --container:1180px;
+  --sans:ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  --shadow-md:0 18px 44px rgba(10,18,32,.12);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:var(--sans);
+  color:var(--text);
+  background:
+    radial-gradient(900px 420px at 18% -10%, rgba(47,102,255,.10), transparent 58%),
+    radial-gradient(820px 460px at 92% -16%, rgba(34,195,255,.08), transparent 56%),
+    var(--bg);
+}
+
+/* navbar */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,247,251,.80);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(231,237,246,.9);
+}
+.topbarInner{
+  max-width:var(--container);
+  margin:auto;
+  padding:10px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.mark{
+  width:36px;height:36px;border-radius:12px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+  display:grid;place-items:center;
+  box-shadow:0 18px 40px rgba(47,102,255,.22);
+}
+.btn{
+  height:36px;
+  padding:0 14px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid #dbe5f4;
+  font-size:12px;
+  font-weight:1000;
+  cursor:pointer;
+}
+.btn.active{
+  background:linear-gradient(180deg,var(--brand),var(--brand2));
+  color:#fff;
+  border-color:#94b2ff;
+}
+
+.shell{
+  max-width:var(--container);
+  margin:auto;
+  padding:12px 14px;
+}
+
+.section{
+  border:1px solid #e7edf6;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:var(--shadow-md);
+  margin-top:12px;
+}
+.sectionHeader{
+  padding:10px 12px;
+  border-bottom:1px solid #e7edf6;
+  font-size:12px;
+  font-weight:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* tabs */
+.tabs{display:flex;gap:6px;}
+.tab{
+  padding:6px 10px;
+  border-radius:10px;
+  border:1px solid #e7edf6;
+  font-size:11px;
+  font-weight:1000;
+  cursor:pointer;
+}
+.tab.active{
+  background:linear-gradient(180deg,var(--brand),var(--brand2));
+  color:#fff;
+  border-color:#9cb8ff;
+}
+
+.sectionBody{padding:12px;}
+
+/* filter bar */
+.filterBar{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+  align-items:center;
+}
+select{
+  height:36px;
+  border-radius:12px;
+  border:1px solid #dbe5f4;
+  padding:0 10px;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* table */
+.tableBox{
+  border:1px solid #e7edf6;
+  border-radius:14px;
+  overflow:hidden;
+}
+table{width:100%;border-collapse:collapse;}
+th,td{
+  padding:10px;
+  font-size:12px;
+  border-bottom:1px solid #eef2f9;
+}
+th{background:#fafbfd;text-align:left;}
+
+.rowDetails{background:#f9fbff;}
+
+.badge{
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:10px;
+  font-weight:1000;
+}
+.badge.ok{background:#e8f8ed;color:#166534;}
+.badge.bad{background:#fde2e2;color:#7f1d1d;}
+
+/* pagination */
+.pagination{
+  display:flex;
+  gap:6px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+.pageBtn{
+  padding:6px 10px;
+  border-radius:10px;
+  border:1px solid #dbe5f4;
+  font-size:11px;
+  cursor:pointer;
+  background:#fff;
+}
+.pageBtn.active{
+  background:#2f66ff;
+  color:#fff;
+  border-color:#94b2ff;
+}
+
+/* toast */
+.toastHost{
+  position:fixed;
+  right:14px;
+  bottom:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.toast{
+  background:#fff;
+  border-radius:14px;
+  border:1px solid #e7edf6;
+  box-shadow:0 24px 60px rgba(10,18,32,.18);
+  padding:10px;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="topbarInner">
+
+    <div class="brand">
+      <div class="mark">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2">
+          <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:1000;">OTA Admin</div>
+        <div style="font-size:11px;color:#7c879a;font-weight:900;">Login Logs</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn" onclick="location.href='pricing-preview.html'">Pricing Preview</button>
+      <button class="btn" onclick="location.href='access-control.html'">Access Control</button>
+      <button class="btn active">Login Logs</button>
+      <button class="btn" id="btnLogout">Logout</button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="shell">
+
+<section class="section">
+  <div class="sectionHeader">
+    Login Activity
+
+    <div class="tabs">
+      <div class="tab active" data-type="all">All</div>
+      <div class="tab" data-type="success">Success</div>
+      <div class="tab" data-type="failed">Failed</div>
+    </div>
+  </div>
+
+  <div class="sectionBody">
+
+    <div class="filterBar">
+      <div>
+        <label style="font-size:11px;">Page</label><br>
+        <select id="pageNumber"></select>
+      </div>
+
+      <div>
+        <label style="font-size:11px;">Page Size</label><br>
+        <select id="pageSize">
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tableBox">
+      <table>
+        <thead>
+          <tr>
+            <th>Partner</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Latest Login</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="logTable"></tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+</section>
+
+</div>
+
+<div class="toastHost" id="toastHost"></div>
+
+<script>
+if(!localStorage.getItem("accessToken")) location.href="index.html";
+
+const BASE="https://akijair.ibos.io/user-management/v1/auth/login-logs";
+
+let page=1;
+let size=20;
+let type="all";
+
+function token(){return "Bearer "+localStorage.getItem("accessToken");}
+function $(id){return document.getElementById(id);}
+
+function toast(t,m){
+  const d=document.createElement("div");
+  d.className="toast";
+  d.innerHTML=`<strong>${t}</strong><br>${m}`;
+  toastHost.appendChild(d);
+  setTimeout(()=>d.remove(),2500);
+}
+
+async function loadLogs(){
+
+  let url=BASE;
+  if(type==="success") url+="/success";
+  if(type==="failed") url+="/failed";
+  url+=`?pageNumber=${page}&pageSize=${size}`;
+
+  const r=await fetch(url,{headers:{Authorization:token()}});
+  const j=await r.json();
+
+  if(!j?.isSuccess) return;
+
+  const rows=j.data.data;
+  const table=logTable;
+  table.innerHTML="";
+
+  rows.forEach(u=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${u.fullName}</td>
+      <td>${u.email}</td>
+      <td>${u.phone||""}</td>
+      <td>${u.roleName}</td>
+      <td>${u.logs[0]?.loginTime||"-"}</td>
+      <td><button class="btn" onclick="toggleDetail(this)">Details</button></td>
+    `;
+    table.appendChild(tr);
+
+    const detail=document.createElement("tr");
+    detail.className="rowDetails";
+    detail.style.display="none";
+
+    let list="";
+    u.logs.forEach(l=>{
+      list+=`
+        <tr>
+          <td>${l.loginTime}</td>
+          <td>${l.clientIp}</td>
+          <td>${l.location}</td>
+          <td>${l.network}</td>
+          <td>${l.logoutTime||"-"}</td>
+          <td><span class="badge ${l.isSuccess?'ok':'bad'}">${l.isSuccess?'SUCCESS':'FAILED'}</span></td>
+        </tr>`;
+    });
+
+    detail.innerHTML=`
+      <td colspan="6">
+        <table style="width:100%">
+          <thead>
+            <tr>
+              <th>Login</th><th>IP</th><th>Location</th><th>Network</th><th>Logout</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>${list||'<tr><td colspan="6">No activity</td></tr>'}</tbody>
+        </table>
+      </td>`;
+    table.appendChild(detail);
+  });
+
+  renderPagination(j.data.totalPages);
+}
+
+window.toggleDetail=(btn)=>{
+  const row=btn.parentElement.parentElement.nextElementSibling;
+  row.style.display=row.style.display==="none"?"table-row":"none";
+};
+
+function renderPagination(total){
+  pageNumber.innerHTML="";
+  for(let i=1;i<=total;i++){
+    const o=document.createElement("option");
+    o.value=i;
+    o.textContent=i;
+    if(i===page) o.selected=true;
+    pageNumber.appendChild(o);
+  }
+}
+
+pageNumber.onchange=()=>{
+  page=Number(pageNumber.value);
+  loadLogs();
+};
+pageSize.onchange=()=>{
+  size=Number(pageSize.value);
+  page=1;
+  loadLogs();
+};
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(a=>a.classList.remove("active"));
+    t.classList.add("active");
+    type=t.dataset.type;
+    page=1;
+    loadLogs();
+  };
+});
+
+btnLogout.onclick=()=>{
+  localStorage.removeItem("accessToken");
+  location.href="index.html";
+};
+
+loadLogs();
+</script>
+
+</body>
+</html>
+
