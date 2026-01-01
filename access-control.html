@@ -1,413 +1,234 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>OTA Admin • Access Control</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<style>
-:root{
-  --bg:#f6f7fb;
-  --panel:#ffffff;
-  --text:#0b1220;
-  --muted:#5b677a;
-  --muted2:#7c879a;
-  --border:#e7edf6;
-  --border2:#dbe5f4;
-  --brand:#2f66ff;
-  --brand2:#1f4ed8;
-  --ok:#16a34a;
-  --warn:#f59e0b;
-  --bad:#dc2626;
-  --shadow-md:0 18px 44px rgba(10,18,32,.12);
-  --container:1180px;
-  --sans:ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-}
-
-*{box-sizing:border-box;}
-body{
-  margin:0;
-  font-family:var(--sans);
-  background:
-    radial-gradient(900px 420px at 18% -10%, rgba(47,102,255,.10), transparent 58%),
-    radial-gradient(820px 460px at 92% -16%, rgba(34,195,255,.08), transparent 56%),
-    var(--bg);
-  color:var(--text);
-}
-
-/* topbar */
-.topbar{
-  position:sticky;top:0;z-index:50;
-  background:rgba(246,247,251,.80);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(231,237,246,.9);
-}
-.topbarInner{
-  max-width:var(--container);
-  margin:auto;
-  padding:10px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.brand{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.mark{
-  width:36px;height:36px;border-radius:12px;
-  background:linear-gradient(135deg,var(--brand),var(--brand2));
-  display:grid;place-items:center;
-  box-shadow:0 18px 40px rgba(47,102,255,.22);
-}
-
-.btn{
-  height:36px;
-  padding:0 14px;
-  border-radius:12px;
-  background:#fff;
-  border:1px solid #dbe5f4;
-  font-size:12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.btn.active{
-  background:linear-gradient(180deg,var(--brand),var(--brand2));
-  color:#fff;
-  border-color:#94b2ff;
-}
-
-/* page layout */
-.shell{
-  max-width:var(--container);
-  margin:auto;
-  padding:12px 14px;
-}
-
-.section{
-  border:1px solid #e7edf6;
-  border-radius:18px;
-  background:#fff;
-  box-shadow:var(--shadow-md);
-  margin-top:12px;
-}
-.sectionHeader{
-  padding:10px 12px;
-  border-bottom:1px solid #e7edf6;
-  font-size:12px;
-  font-weight:1000;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.pill{
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:11px;
-  font-weight:1000;
-  border:1px solid #e7edf6;
-}
-.pill.ok{background:#e9f8ed;border-color:#c1f0cc;color:#166534;}
-.pill.bad{background:#fde2e2;border-color:#f7b1b1;color:#7f1d1d;}
-
-.sectionBody{padding:12px;}
-
-.tableBox{
-  border:1px solid #e7edf6;
-  border-radius:14px;
-  overflow:hidden;
-}
-table{width:100%;border-collapse:collapse;}
-th,td{
-  padding:10px;
-  font-size:12px;
-  border-bottom:1px solid #eef2f9;
-}
-th{background:#fafbfd;text-align:left;}
-
-.modalBackdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.28);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-.modal{
-  width:380px;
-  background:#fff;
-  border-radius:16px;
-  border:1px solid #e7edf6;
-  box-shadow:0 30px 60px rgba(0,0,0,.15);
-  padding:16px;
-}
-.modalHeader{
-  font-weight:1000;
-  font-size:13px;
-  margin-bottom:10px;
-}
-.field{
-  margin-bottom:10px;
-}
-label{
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:4px;
-  display:block;
-}
-input,select,textarea{
-  width:100%;
-  border-radius:10px;
-  border:1px solid #e7edf6;
-  padding:8px;
-  font-size:12px;
-}
-.modalActions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:10px;
-}
-
-/* toast */
-.toastHost{
-  position:fixed;
-  right:14px;
-  bottom:14px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.toast{
-  background:#fff;
-  border-radius:14px;
-  border:1px solid #e7edf6;
-  box-shadow:0 22px 54px rgba(10,18,32,.18);
-  padding:10px;
-  font-size:12px;
-}
-</style>
+    <meta charset="utf-8"/>
+    <title>OTA Admin • Access Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
 
 <div class="topbar">
-  <div class="topbarInner">
+    <div class="topbarInner">
 
-    <div class="brand">
-      <div class="mark">
-        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2">
-          <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/>
-        </svg>
-      </div>
-      <div>
-        <div style="font-size:12px;font-weight:1000;">OTA Admin</div>
-        <div style="font-size:11px;color:#7c879a;font-weight:900;">Access Control</div>
-      </div>
+        <div class="brand">
+            <div class="mark">
+                <svg width="20" height="20" fill="none" stroke="white" stroke-width="2">
+                    <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/>
+                </svg>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:1000;">OTA Admin</div>
+                <div style="font-size:11px;color:#7c879a;font-weight:900;">Access Control</div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn" onclick="location.href='pricing-preview.html'">Pricing Preview</button>
+            <button class="btn active">Access Control</button>
+            <button class="btn" onclick="location.href='login-logs.html'">Login Logs</button>
+            <button class="btn" id="btnLogout">Logout</button>
+        </div>
+
     </div>
-
-    <div style="display:flex;gap:8px;align-items:center;">
-      <button class="btn" onclick="location.href='pricing-preview.html'">Pricing Preview</button>
-      <button class="btn active">Access Control</button>
-      <button class="btn" onclick="location.href='login-logs.html'">Login Logs</button>
-      <button class="btn" id="btnLogout">Logout</button>
-    </div>
-
-  </div>
 </div>
 
 
 <div class="shell">
 
-<section class="section">
-  <div class="sectionHeader">
-    Global Access Mode
-    <span class="pill" id="modePill">Loading…</span>
-  </div>
+    <section class="section">
+        <div class="sectionHeader">
+            Global Access Mode
+            <span class="pill" id="modePill">Loading…</span>
+        </div>
 
-  <div class="sectionBody">
-    <div id="modeHint" style="font-size:12px;color:#5b677a;font-weight:900;margin-bottom:10px;">
-      Loading mode…
-    </div>
+        <div class="sectionBody">
+            <div id="modeHint" style="font-size:12px;color:#5b677a;font-weight:900;margin-bottom:10px;">
+                Loading mode…
+            </div>
 
-    <div style="text-align:right;">
-      <button class="btn" id="btnSwitchMode">Switch Mode</button>
-    </div>
-  </div>
-</section>
+            <div style="text-align:right;">
+                <button class="btn" id="btnSwitchMode">Switch Mode</button>
+            </div>
+        </div>
+    </section>
 
 
-<section class="section">
-  <div class="sectionHeader">
-    Rules
-    <div style="display:flex;gap:10px;align-items:center;">
-      <span class="pill" id="ruleCount">0 Rules</span>
-      <button class="btn" id="btnCreateRule">Create Rule</button>
-    </div>
-  </div>
+    <section class="section">
+        <div class="sectionHeader">
+            Rules
+            <div style="display:flex;gap:10px;align-items:center;">
+                <span class="pill" id="ruleCount">0 Rules</span>
+                <button class="btn" id="btnCreateRule">Create Rule</button>
+            </div>
+        </div>
 
-  <div class="sectionBody">
-    <div class="tableBox">
-      <table>
-        <thead>
-        <tr>
-          <th>Type</th>
-          <th>Value</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Toggle</th>
-        </tr>
-        </thead>
-        <tbody id="ruleTable"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
+        <div class="sectionBody">
+            <div class="tableBox">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Toggle</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ruleTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
 </div>
 
 
 <div class="modalBackdrop" id="modalBackdrop">
-  <div class="modal">
-    <div class="modalHeader">Create Access Rule</div>
+    <div class="modal">
+        <div class="modalHeader">Create Access Rule</div>
 
-    <div class="field">
-      <label>Rule Type</label>
-      <select id="ruleType">
-        <option value="IP">IP</option>
-        <option value="EMAIL">Email</option>
-      </select>
-    </div>
+        <div class="field">
+            <label>Rule Type</label>
+            <select id="ruleType">
+                <option value="IP">IP</option>
+                <option value="EMAIL">Email</option>
+            </select>
+        </div>
 
-    <div class="field">
-      <label>Rule Value</label>
-      <input id="ruleValue" placeholder="Value"/>
-    </div>
+        <div class="field">
+            <label>Rule Value</label>
+            <input id="ruleValue" placeholder="Value"/>
+        </div>
 
-    <div class="field">
-      <label>Behaviour</label>
-      <select id="isAllow">
-        <option value="true">Allow</option>
-        <option value="false">Block</option>
-      </select>
-    </div>
+        <div class="field">
+            <label>Behaviour</label>
+            <select id="isAllow">
+                <option value="true">Allow</option>
+                <option value="false">Block</option>
+            </select>
+        </div>
 
-    <div class="field">
-      <label>Description</label>
-      <textarea id="description"></textarea>
-    </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea id="description"></textarea>
+        </div>
 
-    <div class="modalActions">
-      <button class="btn" id="btnCancel">Cancel</button>
-      <button class="btn" id="btnSubmitRule">Create</button>
+        <div class="modalActions">
+            <button class="btn" id="btnCancel">Cancel</button>
+            <button class="btn" id="btnSubmitRule">Create</button>
+        </div>
     </div>
-  </div>
 </div>
 
 
 <div class="toastHost" id="toastHost"></div>
 
 <script>
-const BASE="https://akijair.ibos.io/user-management/v1/access-control";
+    const BASE = "https://akijair.ibos.io/user-management/v1/access-control";
 
-if(!localStorage.getItem("accessToken")) location.href="index.html";
+    if (!localStorage.getItem("accessToken")) location.href = "index.html";
 
-function $(id){return document.getElementById(id);}
-function token(){return "Bearer "+localStorage.getItem("accessToken");}
+    function $(id) {
+        return document.getElementById(id);
+    }
 
-btnLogout.onclick=()=>{
-  localStorage.removeItem("accessToken");
-  location.href="index.html";
-};
+    function token() {
+        return "Bearer " + localStorage.getItem("accessToken");
+    }
 
-function toast(t,m){
-  const d=document.createElement("div");
-  d.className="toast";
-  d.innerHTML=`<strong>${t}</strong><br>${m}`;
-  document.getElementById("toastHost").appendChild(d);
-  setTimeout(()=>d.remove(),2500);
-}
+    btnLogout.onclick = () => {
+        localStorage.removeItem("accessToken");
+        location.href = "index.html";
+    };
 
-function setModeHint(mode,allowAll){
-  if(mode==="BLACKLIST" && allowAll){
-    modeHint.innerHTML="<strong>Blacklist Mode</strong><br>All users allowed except blocked ones.";
-  }else{
-    modeHint.innerHTML="<strong>Whitelist Mode</strong><br>All users blocked except allowed ones.";
-  }
-}
+    function toast(t, m) {
+        const d = document.createElement("div");
+        d.className = "toast";
+        d.innerHTML = `<strong>${t}</strong><br>${m}`;
+        document.getElementById("toastHost").appendChild(d);
+        setTimeout(() => d.remove(), 2500);
+    }
 
-async function loadMode(){
-  const r=await fetch(BASE+"/mode",{headers:{Authorization:token()}});
-  const j=await r.json();
-  if(j?.isSuccess){
-    const m=j.data.mode;
-    const a=j.data.allowAll===true;
-    modePill.className="pill "+(m==="BLACKLIST"?"bad":"ok");
-    modePill.textContent=m;
-    setModeHint(m,a);
-  }
-}
+    function setModeHint(mode, allowAll) {
+        if (mode === "BLACKLIST" && allowAll) {
+            modeHint.innerHTML = "<strong>Blacklist Mode</strong><br>All users allowed except blocked ones.";
+        } else {
+            modeHint.innerHTML = "<strong>Whitelist Mode</strong><br>All users blocked except allowed ones.";
+        }
+    }
 
-async function loadRules(){
-  const r=await fetch(BASE+"/all",{headers:{Authorization:token()}});
-  const j=await r.json();
-  if(!j?.isSuccess) return;
+    async function loadMode() {
+        const r = await fetch(BASE + "/mode", {headers: {Authorization: token()}});
+        const j = await r.json();
+        if (j?.isSuccess) {
+            const m = j.data.mode;
+            const a = j.data.allowAll === true;
+            modePill.className = "pill " + (m === "BLACKLIST" ? "bad" : "ok");
+            modePill.textContent = m;
+            setModeHint(m, a);
+        }
+    }
 
-  ruleTable.innerHTML="";
-  j.data.forEach(x=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
+    async function loadRules() {
+        const r = await fetch(BASE + "/all", {headers: {Authorization: token()}});
+        const j = await r.json();
+        if (!j?.isSuccess) return;
+
+        ruleTable.innerHTML = "";
+        j.data.forEach(x => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
       <td>${x.ruleType}</td>
       <td>${x.ruleValue}</td>
-      <td>${x.description||""}</td>
-      <td><span class="pill ${x.isAllow?'ok':'bad'}">${x.isAllow?'ALLOW':'BLOCK'}</span></td>
-      <td><button class="btn" onclick="toggleRule('${x.id}',${x.isAllow})">${x.isAllow?'Block':'Allow'}</button></td>`;
-    ruleTable.appendChild(tr);
-  });
+      <td>${x.description || ""}</td>
+      <td><span class="pill ${x.isAllow ? 'ok' : 'bad'}">${x.isAllow ? 'ALLOW' : 'BLOCK'}</span></td>
+      <td><button class="btn" onclick="toggleRule('${x.id}',${x.isAllow})">${x.isAllow ? 'Block' : 'Allow'}</button></td>`;
+            ruleTable.appendChild(tr);
+        });
 
-  ruleCount.textContent=j.data.length+" Rules";
-}
+        ruleCount.textContent = j.data.length + " Rules";
+    }
 
-window.toggleRule=async(id,isAllow)=>{
-  await fetch(`${BASE}/${id}/${isAllow?'block':'allow'}`,{
-    method:"PUT",
-    headers:{Authorization:token()}
-  });
-  loadRules();
-  toast("Updated","Rule updated");
-};
+    window.toggleRule = async (id, isAllow) => {
+        await fetch(`${BASE}/${id}/${isAllow ? 'block' : 'allow'}`, {
+            method: "PUT",
+            headers: {Authorization: token()}
+        });
+        loadRules();
+        toast("Updated", "Rule updated");
+    };
 
-btnCreateRule.onclick=()=>modalBackdrop.style.display="flex";
-btnCancel.onclick=()=>modalBackdrop.style.display="none";
+    btnCreateRule.onclick = () => modalBackdrop.style.display = "flex";
+    btnCancel.onclick = () => modalBackdrop.style.display = "none";
 
-btnSubmitRule.onclick=async()=>{
-  const body={
-    ruleType:ruleType.value,
-    ruleValue:ruleValue.value.trim(),
-    isAllow:isAllow.value==="true",
-    description:description.value.trim()
-  };
-  await fetch(BASE,{
-    method:"POST",
-    headers:{Authorization:token(),"Content-Type":"application/json"},
-    body:JSON.stringify(body)
-  });
-  modalBackdrop.style.display="none";
-  loadRules();
-  toast("Created","Rule added");
-};
+    btnSubmitRule.onclick = async () => {
+        const body = {
+            ruleType: ruleType.value,
+            ruleValue: ruleValue.value.trim(),
+            isAllow: isAllow.value === "true",
+            description: description.value.trim()
+        };
+        await fetch(BASE, {
+            method: "POST",
+            headers: {Authorization: token(), "Content-Type": "application/json"},
+            body: JSON.stringify(body)
+        });
+        modalBackdrop.style.display = "none";
+        loadRules();
+        toast("Created", "Rule added");
+    };
 
-btnSwitchMode.onclick=async()=>{
-  await fetch(BASE+"/mode/switch",{method:"PUT",headers:{Authorization:token()}});
-  loadMode();
-  loadRules();
-  toast("Mode Switched","Global mode changed");
-};
+    btnSwitchMode.onclick = async () => {
+        await fetch(BASE + "/mode/switch", {method: "PUT", headers: {Authorization: token()}});
+        loadMode();
+        loadRules();
+        toast("Mode Switched", "Global mode changed");
+    };
 
-loadMode();
-loadRules();
+    loadMode();
+    loadRules();
 </script>
 
 </body>

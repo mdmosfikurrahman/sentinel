@@ -1,0 +1,561 @@
+/* =========================================================
+   OTA ADMIN — SHARED DESIGN SYSTEM (SAFE VERSION)
+   Works for:
+   - pricing-preview.html
+   - login-logs.html
+   - access-control.html
+========================================================= */
+
+:root{
+    --bg:#f6f7fb;
+    --panel:#ffffff;
+    --text:#0b1220;
+    --muted:#5b677a;
+    --muted2:#7c879a;
+    --border:#e7edf6;
+    --border2:#dbe5f4;
+    --brand:#2f66ff;
+    --brand2:#1f4ed8;
+    --ok:#16a34a;
+    --warn:#f59e0b;
+    --bad:#dc2626;
+
+    --shadow-xs:0 1px 0 rgba(10,18,32,.03);
+    --shadow-sm:0 12px 26px rgba(10,18,32,.08);
+    --shadow-md:0 18px 44px rgba(10,18,32,.12);
+
+    --radius-sm:10px;
+    --radius-md:14px;
+    --radius-lg:18px;
+
+    --container:1180px;
+    --sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+/* ================= RESET ================= */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--text);
+    background:
+            radial-gradient(900px 420px at 18% -10%, rgba(47,102,255,.10), transparent 58%),
+            radial-gradient(820px 460px at 92% -16%, rgba(34,195,255,.08), transparent 56%),
+            var(--bg);
+}
+
+/* ================= NAVBAR ================= */
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:60;
+    background:rgba(246,247,251,.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(231,237,246,.9);
+}
+.topbarInner{
+    max-width:var(--container);
+    margin:auto;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+.brand{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+.mark{
+    width:36px;
+    height:36px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    display:grid;
+    place-items:center;
+    box-shadow:0 18px 40px rgba(47,102,255,.22);
+}
+
+/* ================= BUTTONS ================= */
+.btn{
+    height:36px;
+    padding:0 14px;
+    border-radius:12px;
+    border:1px solid var(--border2);
+    background:#fff;
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:var(--shadow-xs);
+}
+.btn:hover{
+    box-shadow:var(--shadow-sm);
+}
+.btn.primary,
+.btn.active{
+    background:linear-gradient(180deg,var(--brand),var(--brand2));
+    color:#fff;
+    border-color:#94b2ff;
+}
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* ================= LAYOUT ================= */
+.shell{
+    max-width:var(--container);
+    margin:auto;
+    padding:12px 14px;
+}
+.section{
+    margin-top:12px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);
+}
+.sectionHeader{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    font-weight:1000;
+}
+.sectionBody{
+    padding:12px;
+}
+
+/* ================= FORM ELEMENTS ================= */
+.field{margin-bottom:10px}
+label,.label{
+    display:block;
+    font-size:11px;
+    font-weight:900;
+    margin-bottom:4px;
+    color:var(--muted2);
+}
+input,select,textarea{
+    width:100%;
+    height:36px;
+    border-radius:10px;
+    border:1px solid var(--border2);
+    padding:0 10px;
+    font-size:12px;
+    font-weight:900;
+    background:#fff;
+}
+textarea{
+    height:auto;
+    padding:8px;
+}
+
+/* ================= GRID (Pricing Preview) ================= */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:8px;
+}
+.col2{grid-column:span 2}
+.col4{grid-column:span 4}
+
+@media (max-width:1100px){
+    .col2,.col4{grid-column:span 6}
+}
+@media (max-width:720px){
+    .col2,.col4{grid-column:span 12}
+}
+
+/* ================= PILLS / BADGES ================= */
+.pill{
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:11px;
+    font-weight:1000;
+    border:1px solid var(--border);
+    background:#fff;
+}
+.pill.ok{background:#e9f8ed;color:#166534}
+.pill.bad{background:#fde2e2;color:#7f1d1d}
+.pill.warn{background:#fff7ed;color:#7c2d12}
+
+.badge{
+    border-radius:999px;
+    padding:4px 8px;
+    font-size:10px;
+    font-weight:1000;
+}
+.badge.ok{background:#e8f8ed;color:#166534}
+.badge.bad{background:#fde2e2;color:#7f1d1d}
+
+/* ================= TABLE (Login Logs) ================= */
+.tableBox{
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    padding:10px;
+    font-size:12px;
+    border-bottom:1px solid #eef2f9;
+}
+th{
+    background:#fafbfd;
+    text-align:left;
+}
+.rowDetails{
+    background:#f9fbff;
+}
+
+/* ================= TABS ================= */
+.tabs{
+    display:flex;
+    gap:6px;
+}
+.tab{
+    padding:6px 10px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+}
+.tab.active{
+    background:linear-gradient(180deg,var(--brand),var(--brand2));
+    color:#fff;
+    border-color:#94b2ff;
+}
+
+/* ================= PAGINATION ================= */
+.pagination{
+    display:flex;
+    gap:6px;
+    justify-content:flex-end;
+    margin-top:8px;
+}
+.pageBtn{
+    padding:4px 8px;
+    border-radius:8px;
+    border:1px solid var(--border2);
+    font-size:11px;
+    cursor:pointer;
+    background:#fff;
+}
+.pageBtn.active{
+    background:#2f66ff;
+    color:#fff;
+    border-color:#94b2ff;
+}
+
+/* ================= MODAL (Access Control) ================= */
+.modalBackdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.28);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+.modal{
+    width:380px;
+    background:#fff;
+    border-radius:16px;
+    border:1px solid var(--border);
+    box-shadow:0 30px 60px rgba(0,0,0,.15);
+    padding:16px;
+}
+.modalHeader{
+    font-weight:1000;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+/* ================= TOAST ================= */
+.toastHost{
+    position:fixed;
+    right:14px;
+    bottom:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:120;
+}
+.toast{
+    background:#fff;
+    border-radius:14px;
+    border:1px solid var(--border);
+    box-shadow:0 22px 54px rgba(10,18,32,.18);
+    padding:10px;
+    font-size:12px;
+}
+
+/* =========================================================
+   AUTH / LOGIN PAGE (index.html)
+========================================================= */
+
+.authWrap{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+}
+
+.authCard{
+    width:380px;
+    background:var(--panel);
+    border-radius:18px;
+    border:1px solid var(--border);
+    box-shadow:0 30px 70px rgba(10,18,32,.18);
+    padding:24px;
+}
+
+.authBrand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.authBrand .mark{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+}
+
+.authTitle{
+    margin:0;
+    font-size:16px;
+    font-weight:1000;
+}
+
+.authSub{
+    margin:4px 0 0 0;
+    font-size:12px;
+    font-weight:900;
+    color:var(--muted2);
+}
+
+.authField{
+    margin-bottom:14px;
+}
+
+.authField label{
+    font-size:11px;
+    font-weight:1000;
+    margin-bottom:5px;
+    display:block;
+}
+
+.authInput{
+    width:100%;
+    height:42px;
+    border-radius:12px;
+    border:1px solid var(--border2);
+    padding:0 11px;
+    font-size:12px;
+    font-weight:900;
+}
+
+.authInput:focus{
+    outline:none;
+    border-color:#9cb8ff;
+    box-shadow:0 0 0 3px rgba(47,102,255,.14);
+}
+
+.authBtn{
+    width:100%;
+    height:42px;
+    border-radius:12px;
+    border:1px solid #94b2ff;
+    background:linear-gradient(180deg,var(--brand),var(--brand2));
+    color:#fff;
+    font-size:12px;
+    font-weight:1000;
+    cursor:pointer;
+}
+
+.authBtn:active{
+    transform:translateY(1px);
+}
+
+.authMsg{
+    min-height:16px;
+    margin-top:8px;
+    font-size:11px;
+    font-weight:900;
+    color:var(--bad);
+}
+
+/* =========================================================
+   PRICING PREVIEW — CARDS & TABLE VIEW
+========================================================= */
+
+/* empty state */
+.empty{
+    padding:12px;
+    border:1px dashed var(--border);
+    border-radius:var(--radius-lg);
+    background:#fff;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:900;
+}
+
+/* cards grid */
+.cardsRow{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+}
+
+@media (max-width:900px){
+    .cardsRow{ grid-template-columns:1fr; }
+}
+
+/* card */
+.card{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+}
+
+/* left accent stripe */
+.cardStripe{
+    position:absolute;
+    inset:0 auto 0 0;
+    width:3px;
+    background:var(--brand);
+}
+
+.card[data-accent="supplier"] .cardStripe{ background:#2f66ff; }
+.card[data-accent="markup"] .cardStripe{ background:#f59e0b; }
+.card[data-accent="discount"] .cardStripe{ background:#dc2626; }
+.card[data-accent="commission"] .cardStripe{ background:#16a34a; }
+
+/* card header */
+.cardHead{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#fafbfd;
+}
+
+.cardTitle{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:1000;
+}
+
+.metaInline{
+    font-size:11px;
+    font-weight:900;
+    color:var(--muted);
+}
+
+/* icon badge */
+.iconBadge{
+    width:28px;
+    height:28px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#fff;
+    display:grid;
+    place-items:center;
+}
+
+/* card body */
+.cardBody{
+    padding:12px;
+}
+
+/* key-value table */
+.kv{
+    display:grid;
+    grid-template-columns:130px 1fr;
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    background:#fff;
+}
+
+.row{ display:contents; }
+
+.k{
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:900;
+    color:var(--muted);
+    background:#fafbfd;
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+}
+
+.v{
+    padding:8px 10px;
+    font-size:12px;
+    font-weight:1000;
+    border-bottom:1px solid var(--border);
+    word-break:break-word;
+}
+
+.row:last-child .k,
+.row:last-child .v{
+    border-bottom:none;
+}
+
+/* hide conditional rows */
+.hiddenRow{
+    display:none !important;
+}
+
+/* segment box */
+.segment{
+    margin-top:12px;
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    background:#fff;
+}
+
+.segmentHead{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    font-size:12px;
+    font-weight:1000;
+    display:flex;
+    align-items:center;
+}
+
+.segmentTitle{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.segmentBody{
+    padding:12px;
+}
+
+/* actions row */
+.actions{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed var(--border);
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+}

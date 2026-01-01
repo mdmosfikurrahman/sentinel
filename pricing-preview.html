@@ -1,701 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>OTA Admin • Pricing Preview</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    .field{ margin-bottom:14px; }
-    .field label{
-      font-size:12px;
-      display:block;
-      margin-bottom:4px;
-      font-weight:600;
-    }
-    .field input{
-      width:100%;
-      height:40px;
-      padding:0 10px;
-      border-radius:10px;
-      border:1px solid #dbe5f4;
-    }
-    .hint{
-      font-size:12px;
-      color:#b91c1c;
-      height:16px;
-    }
-    .btn{
-      height:40px;
-      border-radius:10px;
-      border:1px solid #dbe5f4;
-      padding:0 14px;
-      cursor:pointer;
-      font-size:12px;
-      font-weight:1000;
-    }
-    .btn.active{
-      background:linear-gradient(180deg,var(--brand),var(--brand2));
-      color:#fff;
-      border-color:#94b2ff;
-    }
-    .btn.primary{
-      background:#2f66ff;
-      color:white;
-    }
-
-    :root{
-      --bg:#f6f7fb;
-      --panel:#ffffff;
-      --text:#0b1220;
-      --muted:#5b677a;
-      --muted2:#7c879a;
-      --border:#e7edf6;
-      --border2:#dbe5f4;
-      --brand:#2f66ff;
-      --brand2:#1f4ed8;
-      --ok:#16a34a;
-      --warn:#f59e0b;
-      --bad:#dc2626;
-      --r10:10px;
-      --r12:12px;
-      --r14:14px;
-      --r16:16px;
-      --r18:18px;
-      --shadow-xs: 0 1px 0 rgba(10,18,32,.03);
-      --shadow-sm: 0 12px 26px rgba(10,18,32,.08);
-      --shadow-md: 0 18px 44px rgba(10,18,32,.12);
-      --shadow-focus: 0 0 0 4px rgba(47,102,255,.14);
-      --container: 1180px;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: var(--sans);
-      color: var(--text);
-      background:
-        radial-gradient(900px 420px at 18% -10%, rgba(47,102,255,.10), transparent 58%),
-        radial-gradient(820px 460px at 92% -16%, rgba(34,195,255,.08), transparent 56%),
-        radial-gradient(760px 420px at 50% 110%, rgba(34,197,94,.06), transparent 52%),
-        var(--bg);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: rgba(246,247,251,.80);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(231,237,246,.9);
-    }
-    .topbarInner{
-      max-width: var(--container);
-      margin: 0 auto;
-      padding: 10px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 260px;
-    }
-    .mark{
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background:
-        radial-gradient(20px 20px at 28% 26%, rgba(255,255,255,.35), transparent 60%),
-        linear-gradient(135deg, var(--brand), var(--brand2));
-      box-shadow: 0 18px 40px rgba(47,102,255,.22);
-      display:grid;
-      place-items:center;
-      position: relative;
-      overflow:hidden;
-    }
-    .mark::after{
-      content:"";
-      position:absolute;
-      inset:-45% -70%;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,.22), transparent);
-      transform: rotate(18deg);
-      animation: sheen 6.4s ease-in-out infinite;
-      pointer-events:none;
-    }
-    @keyframes sheen{
-      0%,55%{ transform: translateX(-50%) rotate(18deg); opacity: 0; }
-      72%{ opacity: .6; }
-      100%{ transform: translateX(70%) rotate(18deg); opacity: 0; }
-    }
-
-    .brandMeta{ display:flex; flex-direction:column; gap: 2px; }
-    .brandTitle{
-      margin:0;
-      font-size: 12px;
-      font-weight: 1000;
-      letter-spacing: .2px;
-      line-height: 1.15;
-      display:flex;
-      gap: 8px;
-      align-items:center;
-    }
-    .brandTitle .tag{
-      font-size: 10px;
-      font-weight: 950;
-      letter-spacing: .55px;
-      text-transform: uppercase;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.92);
-      color: var(--muted);
-      box-shadow: var(--shadow-xs);
-    }
-    .brandSub{
-      margin:0;
-      font-size: 11px;
-      font-weight: 900;
-      color: var(--muted);
-      letter-spacing: .2px;
-    }
-
-    .topRight{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.92);
-      box-shadow: var(--shadow-xs), 0 12px 22px rgba(10,18,32,.05);
-      font-size: 11px;
-      font-weight: 950;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-    .dot{
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: #a6b0c1;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.55);
-    }
-    .dot.ok{ background: var(--ok); }
-    .dot.warn{ background: var(--warn); }
-    .dot.bad{ background: var(--bad); }
-
-    .shell{
-      max-width: var(--container);
-      margin: 0 auto;
-      padding: 12px 14px 18px;
-    }
-
-    .hero{ display:none; }
-
-    .section{
-      margin-top: 10px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.96);
-      border-radius: var(--r18);
-      box-shadow: var(--shadow-xs), var(--shadow-md);
-      overflow:hidden;
-      position: relative;
-    }
-    .section::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(860px 220px at 10% 0%, rgba(47,102,255,.07), transparent 60%),
-        radial-gradient(700px 220px at 90% 0%, rgba(34,195,255,.06), transparent 60%);
-      opacity: .60;
-      pointer-events:none;
-    }
-    .sectionHeader, .sectionBody{ position: relative; z-index: 1; }
-
-    .sectionHeader{
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      border-bottom: 1px solid rgba(231,237,246,.95);
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,252,255,.92));
-    }
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 1050;
-      letter-spacing: .2px;
-    }
-    .titleIcon{
-      width: 28px;
-      height: 28px;
-      border-radius: 12px;
-      border: 1px solid rgba(47,102,255,.14);
-      background: rgba(47,102,255,.08);
-      display:grid;
-      place-items:center;
-      box-shadow: 0 12px 22px rgba(47,102,255,.08);
-    }
-    .titleIcon svg{ color: var(--brand); }
-
-    .sectionBody{ padding: 12px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 8px;
-      align-items:end;
-    }
-    .col4{ grid-column: span 4; }
-    .col2{ grid-column: span 2; }
-
-    @media (min-width: 1100px){
-      .col4{ grid-column: span 3; }
-      .col2{ grid-column: span 2; }
-    }
-
-    @media (max-width: 1100px){ .col4,.col2{ grid-column: span 6; } }
-    @media (max-width: 720px){ .col4,.col2{ grid-column: span 12; } }
-
-    .field .label{
-      font-size: 10px;
-      font-weight: 1000;
-      color: var(--muted2);
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      margin: 0 0 6px 0;
-    }
-
-    input, select{
-      width: 100%;
-      height: 40px;
-      border: 1px solid var(--border2);
-      border-radius: 12px;
-      padding: 0 11px;
-      background: rgba(255,255,255,.98);
-      outline: none;
-      font-size: 12px;
-      font-weight: 950;
-      color: var(--text);
-      box-shadow: var(--shadow-xs), 0 10px 18px rgba(10,18,32,.05);
-      transition: border-color .12s ease, box-shadow .12s ease, transform .08s ease, background .12s ease;
-    }
-    input::placeholder{ color:#a2adc1; font-weight: 900; }
-    input:focus, select:focus{
-      border-color: rgba(47,102,255,.55);
-      box-shadow: var(--shadow-focus), 0 14px 26px rgba(10,18,32,.10);
-      background: #fff;
-    }
-    input:active, select:active{ transform: translateY(.3px); }
-
-    select{
-      appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #7f8aa1 50%),
-        linear-gradient(135deg, #7f8aa1 50%, transparent 50%),
-        linear-gradient(to right, transparent, transparent);
-      background-position:
-        calc(100% - 18px) 17px,
-        calc(100% - 12px) 17px,
-        0 0;
-      background-size: 6px 6px, 6px 6px, 100% 100%;
-      background-repeat: no-repeat;
-      padding-right: 36px;
-    }
-
-    .hint{
-      margin-top: 6px;
-      font-size: 11px;
-      font-weight: 900;
-      color: var(--muted2);
-      display:none;
-    }
-    .hint.show{ display:block; }
-
-    .segment{
-      margin-top: 10px;
-      border-radius: var(--r18);
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.96);
-      box-shadow: var(--shadow-xs), var(--shadow-sm);
-      overflow:hidden;
-      position: relative;
-    }
-    .segment::after{
-      content:"";
-      position:absolute;
-      inset: 0;
-      background:
-        radial-gradient(460px 190px at 20% 0%, rgba(34,195,255,.08), transparent 60%),
-        radial-gradient(460px 190px at 80% 0%, rgba(47,102,255,.06), transparent 60%);
-      pointer-events:none;
-      opacity: .45;
-    }
-    .segmentHead, .segmentBody{ position: relative; z-index: 1; }
-    .segmentHead{
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      border-bottom: 1px solid rgba(231,237,246,.95);
-      background: linear-gradient(180deg, rgba(251,252,255,.96), rgba(255,255,255,.96));
-    }
-    .segmentTitle{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 1050;
-      letter-spacing: .2px;
-    }
-    .badgeIcon{
-      width: 26px;
-      height: 26px;
-      border-radius: 12px;
-      border: 1px solid rgba(47,102,255,.14);
-      background: rgba(47,102,255,.08);
-      display:grid;
-      place-items:center;
-      box-shadow: 0 12px 22px rgba(47,102,255,.08);
-    }
-    .badgeIcon svg{ color: var(--brand); }
-    .segmentBody{ padding: 12px; }
-
-    .actions{
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed rgba(219,227,243,.95);
-      display:flex;
-      justify-content:flex-end;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
-    .btn{
-      height: 40px;
-      padding: 0 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.96);
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 1050;
-      cursor: pointer;
-      box-shadow: var(--shadow-xs), 0 14px 26px rgba(10,18,32,.10);
-      transition: transform .10s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      user-select:none;
-    }
-    .btn:hover{
-      border-color: rgba(200,210,230,.95);
-      box-shadow: var(--shadow-xs), 0 18px 34px rgba(10,18,32,.12);
-      transform: translateY(-1px);
-    }
-    .btn:active{ transform: translateY(0px); }
-    .btn:disabled{ opacity:.7; cursor:not-allowed; transform:none !important; }
-
-    .btn.primary{
-      border-color: rgba(47,102,255,.35);
-      background:
-        radial-gradient(22px 22px at 18% 22%, rgba(255,255,255,.22), transparent 60%),
-        linear-gradient(180deg, var(--brand), var(--brand2));
-      color: #fff;
-      box-shadow: 0 22px 44px rgba(47,102,255,.22);
-    }
-    .btn.primary:hover{
-      box-shadow: 0 28px 56px rgba(47,102,255,.26);
-      transform: translateY(-1px);
-    }
-
-    .runState{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 950;
-      color: var(--muted);
-    }
-    .spinner{
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      border: 2px solid rgba(210,220,240,.95);
-      border-top-color: var(--brand);
-      animation: spin .75s linear infinite;
-    }
-    @keyframes spin{ to{ transform: rotate(360deg);} }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(247,249,253,.95);
-      font-size: 11px;
-      font-weight: 1050;
-      color: var(--muted);
-      min-height: 28px;
-      white-space: nowrap;
-    }
-    .pill.ok{ border-color: rgba(22,163,74,.22); background: rgba(22,163,74,.10); color:#166534; }
-    .pill.bad{ border-color: rgba(220,38,38,.22); background: rgba(220,38,38,.10); color:#7f1d1d; }
-    .pill.warn{ border-color: rgba(245,158,11,.25); background: rgba(245,158,11,.12); color:#7c2d12; }
-
-    .empty{
-      padding: 12px;
-      border: 1px dashed rgba(219,227,243,.95);
-      border-radius: var(--r18);
-      background: rgba(255,255,255,.86);
-      color: var(--muted);
-      font-weight: 950;
-      font-size: 12px;
-    }
-
-    .cardsRow{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      align-items: stretch;
-    }
-    @media (max-width: 900px){ .cardsRow{ grid-template-columns: 1fr; } }
-
-    .card{
-      border: 1px solid rgba(231,237,246,.95);
-      border-radius: var(--r18);
-      background: rgba(255,255,255,.96);
-      box-shadow: var(--shadow-xs), var(--shadow-sm);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      position: relative;
-      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
-      min-height: unset;
-    }
-    .card:hover{
-      transform: translateY(-1px);
-      border-color: rgba(215,225,245,.95);
-      box-shadow: var(--shadow-xs), 0 20px 50px rgba(10,18,32,.14);
-    }
-    .cardStripe{
-      position:absolute;
-      inset:0 auto 0 0;
-      width: 3px;
-      opacity:.9;
-    }
-    .card[data-accent="supplier"]{ --acc1: rgba(47,102,255,.95); }
-    .card[data-accent="markup"]{ --acc1: rgba(245,158,11,.95); }
-    .card[data-accent="discount"]{ --acc1: rgba(220,38,38,.88); }
-    .card[data-accent="commission"]{ --acc1: rgba(22,163,74,.95); }
-    .card .cardStripe{
-      background: linear-gradient(180deg, var(--acc1), rgba(255,255,255,0));
-    }
-
-    .cardHead{
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      border-bottom: 1px solid rgba(220,228,245,.95);
-      background: linear-gradient(180deg, rgba(251,252,255,.96), rgba(255,255,255,.96));
-    }
-    .cardTitle{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 1200;
-      letter-spacing: .2px;
-      color: #0b1220;
-      white-space: nowrap;
-    }
-    .metaInline{
-      font-size: 11px;
-      font-weight: 950;
-      color: var(--muted);
-      letter-spacing: .1px;
-      margin-left: 2px;
-    }
-
-    .iconBadge{
-      width: 30px;
-      height: 30px;
-      border-radius: 12px;
-      border: 1px solid rgba(231,237,246,.95);
-      background:
-        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.36), transparent 60%),
-        linear-gradient(135deg, rgba(47,102,255,.12), rgba(34,195,255,.08));
-      display:grid;
-      place-items:center;
-      box-shadow: 0 14px 26px rgba(10,18,32,.08);
-    }
-
-    .cardBody{
-      padding: 10px 12px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    .kv{
-      display:grid;
-      grid-template-columns: 130px 1fr;
-      border: 1px solid rgba(231,237,246,.95);
-      border-radius: var(--r16);
-      overflow:hidden;
-      background: rgba(251,252,255,.75);
-    }
-    .row{ display: contents; }
-    .k,.v{
-      padding: 8px 10px;
-      border-bottom: 1px solid rgba(231,237,246,.95);
-      font-size: 12px;
-      line-height: 1.15;
-    }
-    .k{
-      color: var(--muted);
-      font-weight: 950;
-      background: rgba(255,255,255,.92);
-      border-right: 1px solid rgba(231,237,246,.95);
-    }
-    .v{
-      color: var(--text);
-      font-weight: 1050;
-      word-break: break-word;
-      font-variant-numeric: tabular-nums;
-    }
-    .row:last-child .k, .row:last-child .v{ border-bottom:none; }
-
-    .hiddenRow{ display:none !important; }
-
-    .toastHost{
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      z-index: 80;
-      pointer-events:none;
-    }
-    .toast{
-      pointer-events:auto;
-      min-width: 280px;
-      max-width: 420px;
-      border-radius: 14px;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.95);
-      box-shadow: 0 22px 54px rgba(10,18,32,.18);
-      padding: 10px 10px;
-      display:flex;
-      align-items:flex-start;
-      gap: 10px;
-      transform: translateY(10px);
-      opacity: 0;
-      animation: toastIn .18s ease forwards;
-      backdrop-filter: blur(10px);
-    }
-    @keyframes toastIn{ to{ transform: translateY(0); opacity: 1; } }
-    .toastIcon{
-      width: 28px;
-      height: 28px;
-      border-radius: 12px;
-      display:grid;
-      place-items:center;
-      background: rgba(47,102,255,.10);
-      border: 1px solid rgba(47,102,255,.18);
-      flex: 0 0 auto;
-    }
-    .toastIcon.ok{ background: rgba(22,163,74,.12); border-color: rgba(22,163,74,.22); }
-    .toastIcon.bad{ background: rgba(220,38,38,.12); border-color: rgba(220,38,38,.22); }
-    .toastIcon.warn{ background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.22); }
-    .toastText{ display:flex; flex-direction:column; gap: 2px; }
-    .toastTitle{ font-size: 11px; font-weight: 1100; letter-spacing: .2px; margin:0; }
-    .toastMsg{ font-size: 11px; font-weight: 900; color: var(--muted); margin:0; line-height: 1.25; word-break: break-word; }
-    .toastClose{
-      margin-left:auto;
-      border: 1px solid rgba(231,237,246,.95);
-      background: rgba(255,255,255,.92);
-      height: 28px;
-      width: 28px;
-      border-radius: 12px;
-      display:grid;
-      place-items:center;
-      cursor: pointer;
-      box-shadow: var(--shadow-xs);
-    }
-    .toastClose:hover{ border-color: rgba(200,210,230,.95); }
-
-    @media (prefers-reduced-motion: reduce){
-      *{ animation:none !important; transition:none !important; }
-      .mark::after{ display:none; }
-    }
-  </style>
+    <meta charset="utf-8"/>
+    <title>OTA Admin • Pricing Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
 
 <div id="appPage">
 
-  <div class="topbar">
-    <div class="topbarInner">
+    <div class="topbar">
+        <div class="topbarInner">
 
-      <div class="brand">
-        <div class="mark">
-          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2">
-            <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/>
-          </svg>
+            <div class="brand">
+                <div class="mark">
+                    <svg width="20" height="20" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-size:12px;font-weight:1000;">OTA Admin</div>
+                    <div style="font-size:11px;color:#7c879a;font-weight:900;">Pricing Preview</div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="btn active">Pricing Preview</button>
+                <button class="btn" onclick="location.href='access-control.html'">Access Control</button>
+                <button class="btn" onclick="location.href='login-logs.html'">Login Logs</button>
+                <button class="btn" id="btnLogout">Logout</button>
+            </div>
+
         </div>
-        <div>
-          <div style="font-size:12px;font-weight:1000;">OTA Admin</div>
-          <div style="font-size:11px;color:#7c879a;font-weight:900;">Pricing Preview</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="btn active">Pricing Preview</button>
-        <button class="btn" onclick="location.href='access-control.html'">Access Control</button>
-        <button class="btn" onclick="location.href='login-logs.html'">Login Logs</button>
-        <button class="btn" id="btnLogout">Logout</button>
-      </div>
-
     </div>
-  </div>
 
-  <div class="shell">
+    <div class="shell">
 
-    <div class="hero"></div>
+        <div class="hero"></div>
 
-    <section class="section">
-      <div class="sectionHeader">
-        <div class="sectionTitle">
+        <section class="section">
+            <div class="sectionHeader">
+                <div class="sectionTitle">
           <span class="titleIcon" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M4 6h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -703,43 +50,43 @@
               <path d="M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </span>
-          Request Filters
-        </div>
+                    Request Filters
+                </div>
 
-        <div id="submitState" class="runState" style="display:none;">
-          <span class="spinner"></span> Running
-        </div>
-      </div>
+                <div id="submitState" class="runState" style="display:none;">
+                    <span class="spinner"></span> Running
+                </div>
+            </div>
 
-      <div class="sectionBody">
-        <div class="grid">
-          <div class="field col4">
-            <div class="label">Partner</div>
-            <select id="partnerId"></select>
-            <div class="hint" id="partnerHint"></div>
-          </div>
+            <div class="sectionBody">
+                <div class="grid">
+                    <div class="field col4">
+                        <div class="label">Partner</div>
+                        <select id="partnerId"></select>
+                        <div class="hint" id="partnerHint"></div>
+                    </div>
 
-          <div class="field col4">
-            <div class="label">Group</div>
-            <select id="groupId"></select>
-            <div class="hint" id="groupHint"></div>
-          </div>
+                    <div class="field col4">
+                        <div class="label">Group</div>
+                        <select id="groupId"></select>
+                        <div class="hint" id="groupHint"></div>
+                    </div>
 
-          <div class="field col2">
-            <div class="label">Journey Type</div>
-            <select id="journeyType"></select>
-            <div class="hint" id="journeyHint"></div>
-          </div>
+                    <div class="field col2">
+                        <div class="label">Journey Type</div>
+                        <select id="journeyType"></select>
+                        <div class="hint" id="journeyHint"></div>
+                    </div>
 
-          <div class="field col2">
-            <div class="label">Airline</div>
-            <input id="airline" placeholder="BG" value="BG" maxlength="2" />
-          </div>
-        </div>
+                    <div class="field col2">
+                        <div class="label">Airline</div>
+                        <input id="airline" placeholder="BG" value="BG" maxlength="2"/>
+                    </div>
+                </div>
 
-        <div class="segment">
-          <div class="segmentHead">
-            <div class="segmentTitle">
+                <div class="segment">
+                    <div class="segmentHead">
+                        <div class="segmentTitle">
               <span class="badgeIcon" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <path d="M10 14l11-11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -747,53 +94,55 @@
                   <path d="M14 10L3 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
               </span>
-              Segment (single)
+                            Segment (single)
+                        </div>
+                    </div>
+
+                    <div class="segmentBody">
+                        <div class="grid">
+                            <div class="field col4">
+                                <div class="label">Origin</div>
+                                <input id="segOrigin" placeholder="DAC" value="DAC" maxlength="3"/>
+                            </div>
+
+                            <div class="field col4">
+                                <div class="label">Destination</div>
+                                <input id="segDestination" placeholder="CXB" value="CXB" maxlength="3"/>
+                            </div>
+
+                            <div class="field col4">
+                                <div class="label">Departure Date</div>
+                                <input id="segDate" type="date" value="2025-12-30"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" id="btnReset" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2"
+                                  stroke-linecap="round"/>
+                            <path d="M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Reset
+                    </button>
+
+                    <button class="btn primary" id="btnSubmit" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 12h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        Run Preview
+                    </button>
+                </div>
             </div>
-          </div>
+        </section>
 
-          <div class="segmentBody">
-            <div class="grid">
-              <div class="field col4">
-                <div class="label">Origin</div>
-                <input id="segOrigin" placeholder="DAC" value="DAC" maxlength="3" />
-              </div>
-
-              <div class="field col4">
-                <div class="label">Destination</div>
-                <input id="segDestination" placeholder="CXB" value="CXB" maxlength="3" />
-              </div>
-
-              <div class="field col4">
-                <div class="label">Departure Date</div>
-                <input id="segDate" type="date" value="2025-12-30" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn" id="btnReset" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Reset
-          </button>
-
-          <button class="btn primary" id="btnSubmit" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <path d="M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Run Preview
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="sectionHeader">
-        <div class="sectionTitle">
+        <section class="section">
+            <div class="sectionHeader">
+                <div class="sectionTitle">
           <span class="titleIcon" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M4 6h16v14H4V6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -801,545 +150,610 @@
               <path d="M8 20V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </span>
-          Preview Output
-        </div>
-        <span class="pill" id="resultPill">No data</span>
-      </div>
+                    Preview Output
+                </div>
+                <span class="pill" id="resultPill">No data</span>
+            </div>
 
-      <div class="sectionBody">
-        <div id="empty" class="empty">No preview loaded.</div>
+            <div class="sectionBody">
+                <div id="empty" class="empty">No preview loaded.</div>
 
-        <div id="cardsRow" class="cardsRow" style="display:none;">
-          <div class="card" data-accent="supplier">
-            <div class="cardStripe"></div>
-            <div class="cardHead">
-              <div class="cardTitle">
+                <div id="cardsRow" class="cardsRow" style="display:none;">
+                    <div class="card" data-accent="supplier">
+                        <div class="cardStripe"></div>
+                        <div class="cardHead">
+                            <div class="cardTitle">
                 <span class="iconBadge" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M4 10V20h16V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     <path d="M2 10l10-6 10 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </span>
-                Supplier
-              </div>
-              <span class="pill ok" id="supplierPill"></span>
-            </div>
-            <div class="cardBody">
-              <div class="kv">
-                <div class="row"><div class="k">Supplier Name</div><div class="v" id="supplierName"></div></div>
-                <div class="row"><div class="k">Supplier Code</div><div class="v" id="supplierCode"></div></div>
-                <div class="row"><div class="k">Currency</div><div class="v" id="supplierCurrency"></div></div>
-              </div>
-            </div>
-          </div>
+                                Supplier
+                            </div>
+                            <span class="pill ok" id="supplierPill"></span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="kv">
+                                <div class="row">
+                                    <div class="k">Supplier Name</div>
+                                    <div class="v" id="supplierName"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Supplier Code</div>
+                                    <div class="v" id="supplierCode"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Currency</div>
+                                    <div class="v" id="supplierCurrency"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="card" data-accent="markup">
-            <div class="cardStripe"></div>
-            <div class="cardHead">
-              <div class="cardTitle">
+                    <div class="card" data-accent="markup">
+                        <div class="cardStripe"></div>
+                        <div class="cardHead">
+                            <div class="cardTitle">
                 <span class="iconBadge" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M4 7h16v10H4V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                     <path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </span>
-                Markup
-              </div>
-              <span class="pill" id="markupPill"></span>
-            </div>
-            <div class="cardBody">
-              <div class="kv">
-                <div class="row"><div class="k">Enabled</div><div class="v" id="markupEnabled"></div></div>
-                <div class="row"><div class="k">Applied On</div><div class="v" id="markupAppliedOn"></div></div>
-                <div class="row"><div class="k">Type</div><div class="v" id="markupType"></div></div>
-                <div class="row"><div class="k">Value</div><div class="v" id="markupValue"></div></div>
-              </div>
-            </div>
-          </div>
+                                Markup
+                            </div>
+                            <span class="pill" id="markupPill"></span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="kv">
+                                <div class="row">
+                                    <div class="k">Enabled</div>
+                                    <div class="v" id="markupEnabled"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Applied On</div>
+                                    <div class="v" id="markupAppliedOn"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Type</div>
+                                    <div class="v" id="markupType"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Value</div>
+                                    <div class="v" id="markupValue"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="card" data-accent="discount">
-            <div class="cardStripe"></div>
-            <div class="cardHead">
-              <div class="cardTitle">
+                    <div class="card" data-accent="discount">
+                        <div class="cardStripe"></div>
+                        <div class="cardHead">
+                            <div class="cardTitle">
                 <span class="iconBadge" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M4 12l8-8 8 8-8 8-8-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                     <path d="M9 15l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </span>
-                Discount
-              </div>
-              <span class="pill" id="discountPill"></span>
-            </div>
-            <div class="cardBody">
-              <div class="kv">
-                <div class="row"><div class="k">Enabled</div><div class="v" id="discountEnabled"></div></div>
-                <div class="row"><div class="k">Applied On</div><div class="v" id="discountAppliedOn"></div></div>
-                <div class="row"><div class="k">Type</div><div class="v" id="discountType"></div></div>
-                <div class="row"><div class="k">Value</div><div class="v" id="discountValue"></div></div>
-              </div>
-            </div>
-          </div>
+                                Discount
+                            </div>
+                            <span class="pill" id="discountPill"></span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="kv">
+                                <div class="row">
+                                    <div class="k">Enabled</div>
+                                    <div class="v" id="discountEnabled"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Applied On</div>
+                                    <div class="v" id="discountAppliedOn"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Type</div>
+                                    <div class="v" id="discountType"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Value</div>
+                                    <div class="v" id="discountValue"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="card" data-accent="commission">
-            <div class="cardStripe"></div>
-            <div class="cardHead">
-              <div class="cardTitle">
+                    <div class="card" data-accent="commission">
+                        <div class="cardStripe"></div>
+                        <div class="cardHead">
+                            <div class="cardTitle">
                 <span class="iconBadge" aria-hidden="true">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M12 1v22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round"/>
                   </svg>
                 </span>
-                Commission <span class="metaInline" id="commissionSourceInline"></span>
-              </div>
-              <span class="pill" id="commissionPill"></span>
+                                Commission <span class="metaInline" id="commissionSourceInline"></span>
+                            </div>
+                            <span class="pill" id="commissionPill"></span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="kv">
+                                <div class="row">
+                                    <div class="k">Enabled</div>
+                                    <div class="v" id="commissionEnabled"></div>
+                                </div>
+                                <div class="row" id="airlineCodeRow">
+                                    <div class="k">Airline Code</div>
+                                    <div class="v" id="commissionAirlineCode"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Applied On</div>
+                                    <div class="v" id="commissionAppliedOn"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Type</div>
+                                    <div class="v" id="commissionType"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="k">Value</div>
+                                    <div class="v" id="commissionValue"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="cardBody">
-              <div class="kv">
-                <div class="row"><div class="k">Enabled</div><div class="v" id="commissionEnabled"></div></div>
-                <div class="row" id="airlineCodeRow"><div class="k">Airline Code</div><div class="v" id="commissionAirlineCode"></div></div>
-                <div class="row"><div class="k">Applied On</div><div class="v" id="commissionAppliedOn"></div></div>
-                <div class="row"><div class="k">Type</div><div class="v" id="commissionType"></div></div>
-                <div class="row"><div class="k">Value</div><div class="v" id="commissionValue"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </section>
 
-      </div>
-    </section>
+    </div>
 
-  </div>
-
-  <div class="toastHost" id="toastHost" aria-live="polite" aria-atomic="true"></div>
+    <div class="toastHost" id="toastHost" aria-live="polite" aria-atomic="true"></div>
 
 </div>
 
 <script>
-if(!localStorage.getItem("accessToken")){
-  location.href="index.html";
-}
+    if (!localStorage.getItem("accessToken")) {
+        location.href = "index.html";
+    }
 
-function getToken(){
-  return "Bearer " + (localStorage.getItem("accessToken") || "");
-}
+    function getToken() {
+        return "Bearer " + (localStorage.getItem("accessToken") || "");
+    }
 
-btnLogout.onclick = () => {
-  localStorage.removeItem("accessToken");
-  location.href="index.html";
-};
+    btnLogout.onclick = () => {
+        localStorage.removeItem("accessToken");
+        location.href = "index.html";
+    };
 
-/* ================= PRICING API ================= */
+    /* ================= PRICING API ================= */
 
-const PRICING_PREVIEW_URL = "https://akijair.ibos.io/configuration-management/v1/supplier-info/pricing/preview";
-const PARTNER_LOOKUP_URL  = "https://akijair.ibos.io/user-management/v1/lookups/active-approved-b2b-partners";
-const GROUP_LOOKUP_URL    = "https://akijair.ibos.io/configuration-management/v1/lookups/fmg-groups";
-const JOURNEY_LOOKUP_URL  = "https://akijair.ibos.io/configuration-management/v1/lookups/journey-types";
+    const PRICING_PREVIEW_URL = "https://akijair.ibos.io/configuration-management/v1/supplier-info/pricing/preview";
+    const PARTNER_LOOKUP_URL = "https://akijair.ibos.io/user-management/v1/lookups/active-approved-b2b-partners";
+    const GROUP_LOOKUP_URL = "https://akijair.ibos.io/configuration-management/v1/lookups/fmg-groups";
+    const JOURNEY_LOOKUP_URL = "https://akijair.ibos.io/configuration-management/v1/lookups/journey-types";
 
-const allowedJourneyCodes = new Set(["1","2","3"]);
+    const allowedJourneyCodes = new Set(["1", "2", "3"]);
 
-const appliedOnMap = { 0: "0", 1: "Total", 2: "Base" };
-const typeMap      = { 0: "0", 1: "Percentage", 2: "Flat" };
+    const appliedOnMap = {0: "0", 1: "Total", 2: "Base"};
+    const typeMap = {0: "0", 1: "Percentage", 2: "Flat"};
 
-const $ = (id) => document.getElementById(id);
+    const $ = (id) => document.getElementById(id);
 
-function setHealth(state, text){
-  const dot = $("healthDot");
-  dot.className = "dot" + (state ? (" " + state) : "");
-  $("healthText").textContent = text || "Ready";
-}
+    function setHealth(state, text) {
+        const dot = $("healthDot");
+        dot.className = "dot" + (state ? (" " + state) : "");
+        $("healthText").textContent = text || "Ready";
+    }
 
-function setSubmitting(on){
-  $("submitState").style.display = on ? "" : "none";
-  $("btnSubmit").disabled = on;
-  $("btnReset").disabled = on;
-}
+    function setSubmitting(on) {
+        $("submitState").style.display = on ? "" : "none";
+        $("btnSubmit").disabled = on;
+        $("btnReset").disabled = on;
+    }
 
-function setHint(id, msg){
-  const el = $(id);
-  if (!msg){ el.textContent = ""; el.classList.remove("show"); return; }
-  el.textContent = msg;
-  el.classList.add("show");
-}
+    function setHint(id, msg) {
+        const el = $(id);
+        if (!msg) {
+            el.textContent = "";
+            el.classList.remove("show");
+            return;
+        }
+        el.textContent = msg;
+        el.classList.add("show");
+    }
 
-function setPill(id, variant, text){
-  const el = $(id);
-  el.className = "pill" + (variant ? (" " + variant) : "");
-  el.textContent = text || "";
-}
+    function setPill(id, variant, text) {
+        const el = $(id);
+        el.className = "pill" + (variant ? (" " + variant) : "");
+        el.textContent = text || "";
+    }
 
-function showResults(show){
-  $("cardsRow").style.display = show ? "" : "none";
-  $("empty").style.display = show ? "none" : "";
-}
+    function showResults(show) {
+        $("cardsRow").style.display = show ? "" : "none";
+        $("empty").style.display = show ? "none" : "";
+    }
 
-function toast(kind, title, message, timeout=3200){
-  const host = $("toastHost");
-  const t = document.createElement("div");
-  t.className = "toast";
+    function toast(kind, title, message, timeout = 3200) {
+        const host = $("toastHost");
+        const t = document.createElement("div");
+        t.className = "toast";
 
-  const icon = document.createElement("div");
-  icon.className = "toastIcon " + (kind || "");
-  icon.innerHTML = (kind === "ok")
-    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-    : (kind === "bad")
-      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#7f1d1d" stroke-width="2" stroke-linecap="round"/><path d="M6 6l12 12" stroke="#7f1d1d" stroke-width="2" stroke-linecap="round"/></svg>`
-      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 9v4" stroke="#7c2d12" stroke-width="2" stroke-linecap="round"/><path d="M12 17h.01" stroke="#7c2d12" stroke-width="2" stroke-linecap="round"/><path d="M10.3 4.3l-7.6 13.2A2 2 0 0 0 4.4 20h15.2a2 2 0 0 0 1.7-2.5L13.7 4.3a2 2 0 0 0-3.4 0z" stroke="#7c2d12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        const icon = document.createElement("div");
+        icon.className = "toastIcon " + (kind || "");
+        icon.innerHTML = (kind === "ok")
+            ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+            : (kind === "bad")
+                ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#7f1d1d" stroke-width="2" stroke-linecap="round"/><path d="M6 6l12 12" stroke="#7f1d1d" stroke-width="2" stroke-linecap="round"/></svg>`
+                : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 9v4" stroke="#7c2d12" stroke-width="2" stroke-linecap="round"/><path d="M12 17h.01" stroke="#7c2d12" stroke-width="2" stroke-linecap="round"/><path d="M10.3 4.3l-7.6 13.2A2 2 0 0 0 4.4 20h15.2a2 2 0 0 0 1.7-2.5L13.7 4.3a2 2 0 0 0-3.4 0z" stroke="#7c2d12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-  const text = document.createElement("div");
-  text.className = "toastText";
-  text.innerHTML = `<p class="toastTitle">${escapeHtml(title || "")}</p><p class="toastMsg">${escapeHtml(message || "")}</p>`;
+        const text = document.createElement("div");
+        text.className = "toastText";
+        text.innerHTML = `<p class="toastTitle">${escapeHtml(title || "")}</p><p class="toastMsg">${escapeHtml(message || "")}</p>`;
 
-  const close = document.createElement("button");
-  close.className = "toastClose";
-  close.type = "button";
-  close.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#5b677a" stroke-width="2" stroke-linecap="round"/><path d="M6 6l12 12" stroke="#5b677a" stroke-width="2" stroke-linecap="round"/></svg>`;
-  close.onclick = () => t.remove();
+        const close = document.createElement("button");
+        close.className = "toastClose";
+        close.type = "button";
+        close.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#5b677a" stroke-width="2" stroke-linecap="round"/><path d="M6 6l12 12" stroke="#5b677a" stroke-width="2" stroke-linecap="round"/></svg>`;
+        close.onclick = () => t.remove();
 
-  t.appendChild(icon);
-  t.appendChild(text);
-  t.appendChild(close);
-  host.appendChild(t);
+        t.appendChild(icon);
+        t.appendChild(text);
+        t.appendChild(close);
+        host.appendChild(t);
 
-  if (timeout > 0) setTimeout(() => { try{ t.remove(); } catch{} }, timeout);
-}
+        if (timeout > 0) setTimeout(() => {
+            try {
+                t.remove();
+            } catch {
+            }
+        }, timeout);
+    }
 
-function escapeHtml(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+    function escapeHtml(s) {
+        return String(s ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
 
-function omitEmpty(obj){
-  const out = {};
-  for (const [k,v] of Object.entries(obj)){
-    if (v === undefined || v === null) continue;
-    if (typeof v === "string" && v.trim() === "") continue;
+    function omitEmpty(obj) {
+        const out = {};
+        for (const [k, v] of Object.entries(obj)) {
+            if (v === undefined || v === null) continue;
+            if (typeof v === "string" && v.trim() === "") continue;
 
-    if (Array.isArray(v)){
-      const cleaned = v
-        .map(x => (x && typeof x === "object" && !Array.isArray(x)) ? omitEmpty(x) : x)
-        .filter(x => {
-          if (x === undefined || x === null) return false;
-          if (typeof x === "string" && x.trim() === "") return false;
-          if (typeof x === "object" && !Array.isArray(x) && Object.keys(x).length === 0) return false;
-          return true;
+            if (Array.isArray(v)) {
+                const cleaned = v
+                    .map(x => (x && typeof x === "object" && !Array.isArray(x)) ? omitEmpty(x) : x)
+                    .filter(x => {
+                        if (x === undefined || x === null) return false;
+                        if (typeof x === "string" && x.trim() === "") return false;
+                        if (typeof x === "object" && !Array.isArray(x) && Object.keys(x).length === 0) return false;
+                        return true;
+                    });
+                if (cleaned.length === 0) continue;
+                out[k] = cleaned;
+                continue;
+            }
+
+            if (typeof v === "object") {
+                const cleaned = omitEmpty(v);
+                if (Object.keys(cleaned).length === 0) continue;
+                out[k] = cleaned;
+                continue;
+            }
+
+            out[k] = v;
+        }
+        return out;
+    }
+
+    function buildPayload() {
+        const origin = $("segOrigin").value.trim().toUpperCase();
+        const destination = $("segDestination").value.trim().toUpperCase();
+        const departureDate = $("segDate").value;
+
+        const segment = omitEmpty({origin, destination, departureDate});
+
+        const base = {
+            partnerId: $("partnerId").value.trim(),
+            groupId: $("groupId").value.trim(),
+            journeyType: Number($("journeyType").value),
+            segments: Object.keys(segment).length ? [segment] : [],
+            airline: $("airline").value.trim().toUpperCase()
+        };
+        return omitEmpty(base);
+    }
+
+    async function safeJsonFetch(url) {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "accept": "*/*",
+                "Authorization": getToken()
+            }
         });
-      if (cleaned.length === 0) continue;
-      out[k] = cleaned;
-      continue;
+        const text = await res.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            return null;
+        }
     }
 
-    if (typeof v === "object"){
-      const cleaned = omitEmpty(v);
-      if (Object.keys(cleaned).length === 0) continue;
-      out[k] = cleaned;
-      continue;
+    function fillSelect(selectEl, placeholderText, items) {
+        selectEl.innerHTML = "";
+        const ph = document.createElement("option");
+        ph.value = "";
+        ph.textContent = placeholderText;
+        ph.selected = true;
+        selectEl.appendChild(ph);
+
+        for (const it of items) {
+            const opt = document.createElement("option");
+            opt.value = it.id;
+            opt.textContent = it.name;
+            selectEl.appendChild(opt);
+        }
     }
 
-    out[k] = v;
-  }
-  return out;
-}
+    async function loadPartners() {
+        const select = $("partnerId");
+        fillSelect(select, "Loading partners…", []);
+        setHint("partnerHint", "");
 
-function buildPayload(){
-  const origin = $("segOrigin").value.trim().toUpperCase();
-  const destination = $("segDestination").value.trim().toUpperCase();
-  const departureDate = $("segDate").value;
+        try {
+            const json = await safeJsonFetch(PARTNER_LOOKUP_URL);
+            if (!json?.isSuccess || !Array.isArray(json?.data)) {
+                fillSelect(select, "Select a partner (optional)", []);
+                setHint("partnerHint", json?.message || "Unable to load partners.");
+                return;
+            }
 
-  const segment = omitEmpty({ origin, destination, departureDate });
+            const items = json.data
+                .map(p => ({id: String(p.partnerId || "").toUpperCase(), name: p.companyName || ""}))
+                .filter(x => x.id && x.name)
+                .sort((a, b) => a.name.localeCompare(b.name));
 
-  const base = {
-    partnerId: $("partnerId").value.trim(),
-    groupId: $("groupId").value.trim(),
-    journeyType: Number($("journeyType").value),
-    segments: Object.keys(segment).length ? [segment] : [],
-    airline: $("airline").value.trim().toUpperCase()
-  };
-  return omitEmpty(base);
-}
-
-async function safeJsonFetch(url){
-  const res = await fetch(url,{
-    method:"GET",
-    headers:{
-      "accept":"*/*",
-      "Authorization": getToken()
-    }
-  });
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { return null; }
-}
-
-function fillSelect(selectEl, placeholderText, items){
-  selectEl.innerHTML = "";
-  const ph = document.createElement("option");
-  ph.value = "";
-  ph.textContent = placeholderText;
-  ph.selected = true;
-  selectEl.appendChild(ph);
-
-  for (const it of items){
-    const opt = document.createElement("option");
-    opt.value = it.id;
-    opt.textContent = it.name;
-    selectEl.appendChild(opt);
-  }
-}
-
-async function loadPartners(){
-  const select = $("partnerId");
-  fillSelect(select, "Loading partners…", []);
-  setHint("partnerHint", "");
-
-  try{
-    const json = await safeJsonFetch(PARTNER_LOOKUP_URL);
-    if (!json?.isSuccess || !Array.isArray(json?.data)){
-      fillSelect(select, "Select a partner (optional)", []);
-      setHint("partnerHint", json?.message || "Unable to load partners.");
-      return;
+            fillSelect(select, "Select a partner (optional)", items);
+        } catch {
+            fillSelect(select, "Select a partner (optional)", []);
+            setHint("partnerHint", "Unable to load partners.");
+        }
     }
 
-    const items = json.data
-      .map(p => ({ id: String(p.partnerId || "").toUpperCase(), name: p.companyName || "" }))
-      .filter(x => x.id && x.name)
-      .sort((a,b) => a.name.localeCompare(b.name));
+    async function loadGroups() {
+        const select = $("groupId");
+        fillSelect(select, "Loading groups…", []);
+        setHint("groupHint", "");
 
-    fillSelect(select, "Select a partner (optional)", items);
-  } catch {
-    fillSelect(select, "Select a partner (optional)", []);
-    setHint("partnerHint", "Unable to load partners.");
-  }
-}
+        try {
+            const json = await safeJsonFetch(GROUP_LOOKUP_URL);
+            if (!json?.isSuccess || !Array.isArray(json?.data)) {
+                fillSelect(select, "Select a group (optional)", []);
+                setHint("groupHint", json?.message || "Unable to load groups.");
+                return;
+            }
 
-async function loadGroups(){
-  const select = $("groupId");
-  fillSelect(select, "Loading groups…", []);
-  setHint("groupHint", "");
+            const items = json.data
+                .map(g => ({id: String(g.id || "").toUpperCase(), name: g.name || g.code || ""}))
+                .filter(x => x.id && x.name)
+                .sort((a, b) => a.name.localeCompare(b.name));
 
-  try{
-    const json = await safeJsonFetch(GROUP_LOOKUP_URL);
-    if (!json?.isSuccess || !Array.isArray(json?.data)){
-      fillSelect(select, "Select a group (optional)", []);
-      setHint("groupHint", json?.message || "Unable to load groups.");
-      return;
+            fillSelect(select, "Select a group (optional)", items);
+        } catch {
+            fillSelect(select, "Select a group (optional)", []);
+            setHint("groupHint", "Unable to load groups.");
+        }
     }
 
-    const items = json.data
-      .map(g => ({ id: String(g.id || "").toUpperCase(), name: g.name || g.code || "" }))
-      .filter(x => x.id && x.name)
-      .sort((a,b) => a.name.localeCompare(b.name));
+    async function loadJourneyTypes() {
+        const select = $("journeyType");
+        fillSelect(select, "Loading journey types…", []);
+        setHint("journeyHint", "");
 
-    fillSelect(select, "Select a group (optional)", items);
-  } catch {
-    fillSelect(select, "Select a group (optional)", []);
-    setHint("groupHint", "Unable to load groups.");
-  }
-}
+        try {
+            const json = await safeJsonFetch(JOURNEY_LOOKUP_URL);
+            if (!json?.isSuccess || !Array.isArray(json?.data)) {
+                fillSelect(select, "Select journey type", []);
+                setHint("journeyHint", json?.message || "Unable to load journey types.");
+                return;
+            }
 
-async function loadJourneyTypes(){
-  const select = $("journeyType");
-  fillSelect(select, "Loading journey types…", []);
-  setHint("journeyHint", "");
+            const items = json.data
+                .filter(j => allowedJourneyCodes.has(String(j.code)))
+                .map(j => ({id: String(j.code), name: j.name || ""}))
+                .filter(x => x.id && x.name);
 
-  try{
-    const json = await safeJsonFetch(JOURNEY_LOOKUP_URL);
-    if (!json?.isSuccess || !Array.isArray(json?.data)){
-      fillSelect(select, "Select journey type", []);
-      setHint("journeyHint", json?.message || "Unable to load journey types.");
-      return;
+            fillSelect(select, "Select journey type", items);
+            if (items.some(x => x.id === "1")) select.value = "1";
+        } catch {
+            fillSelect(select, "Select journey type", []);
+            setHint("journeyHint", "Unable to load journey types.");
+        }
     }
 
-    const items = json.data
-      .filter(j => allowedJourneyCodes.has(String(j.code)))
-      .map(j => ({ id: String(j.code), name: j.name || "" }))
-      .filter(x => x.id && x.name);
+    async function callPreview(payload) {
+        const res = await fetch(PRICING_PREVIEW_URL, {
+            method: "POST",
+            headers: {
+                "accept": "*/*",
+                "Content-Type": "application/json",
+                "Authorization": getToken()
+            },
+            body: JSON.stringify(payload)
+        });
 
-    fillSelect(select, "Select journey type", items);
-    if (items.some(x => x.id === "1")) select.value = "1";
-  } catch {
-    fillSelect(select, "Select journey type", []);
-    setHint("journeyHint", "Unable to load journey types.");
-  }
-}
-
-async function callPreview(payload){
-  const res = await fetch(PRICING_PREVIEW_URL,{
-    method:"POST",
-    headers:{
-      "accept":"*/*",
-      "Content-Type":"application/json",
-      "Authorization": getToken()
-    },
-    body: JSON.stringify(payload)
-  });
-
-  const text = await res.text();
-  try { return JSON.parse(text); }
-  catch { return { isSuccess:false, statusCode:String(res.status), message:"Non-JSON response" }; }
-}
-
-function mapEnum(value, map){
-  if (value === null || value === undefined) return "";
-  const n = Number(value);
-  return (map[n] !== undefined) ? map[n] : String(value);
-}
-
-function formatValue(typeLabel, rawValue){
-  if (rawValue === null || rawValue === undefined) return "";
-  const n = Number(rawValue);
-  const printable = Number.isFinite(n) ? String(n) : String(rawValue);
-  return (typeLabel === "Percentage") ? (printable + "%") : printable;
-}
-
-function setValue(id, v){
-  $(id).textContent = (v === null || v === undefined) ? "" : String(v);
-}
-
-function onOff(enabled){
-  if (enabled === true) return { variant:"ok", text:"Yes" };
-  if (enabled === false) return { variant:"bad", text:"No" };
-  return { variant:"", text:"" };
-}
-
-function normalize(data){
-  if (!data || typeof data !== "object") return null;
-
-  const mkType = mapEnum(data.markupType, typeMap);
-  const dsType = mapEnum(data.discountType, typeMap);
-  const cmType = mapEnum(data.commissionType, typeMap);
-
-  return {
-    supplierName: data.supplierName ?? "",
-    supplierCode: data.supplierShortCode ?? "",
-    supplierCurrency: data.supplierCurrency ?? "",
-
-    isMarkupApply: data.isMarkupApply,
-    markupType: mkType,
-    markupValue: formatValue(mkType, data.markupValue),
-    markupAppliedOn: mapEnum(data.markupAppliedOn, appliedOnMap),
-
-    isDiscountApply: data.isDiscountApply,
-    discountType: dsType,
-    discountValue: formatValue(dsType, data.discountValue),
-    discountAppliedOn: mapEnum(data.discountAppliedOn, appliedOnMap),
-
-    isCommissionApply: data.isCommissionApply,
-    commissionSource: data.commissionSource ?? "",
-    commissionAirlineCode: data.commissionAirlineCode,
-    commissionType: cmType,
-    commissionValue: formatValue(cmType, data.commissionValue),
-    commissionAppliedOn: mapEnum(data.commissionAppliedOn, appliedOnMap)
-  };
-}
-
-function toggleAirlineCodeRow(value){
-  const row = $("airlineCodeRow");
-  const hasValue = value !== null && value !== undefined && String(value).trim() !== "";
-  row.classList.toggle("hiddenRow", !hasValue);
-}
-
-function renderCards(data){
-  if (!data){
-    showResults(false);
-    setPill("resultPill", "", "No data");
-    $("commissionSourceInline").textContent = "";
-    toggleAirlineCodeRow(null);
-    setValue("commissionAirlineCode", "");
-    return;
-  }
-
-  const d = normalize(data);
-  showResults(true);
-  setPill("resultPill", "ok", "Loaded");
-
-  setValue("supplierName", d.supplierName);
-  setValue("supplierCode", d.supplierCode);
-  setValue("supplierCurrency", d.supplierCurrency);
-  setPill("supplierPill", "ok", (d.supplierName || d.supplierCode) ? "Ready" : "");
-
-  const mk = onOff(d.isMarkupApply);
-  setPill("markupPill", mk.variant, mk.text);
-  setValue("markupEnabled", d.isMarkupApply === true ? "Yes" : d.isMarkupApply === false ? "No" : "");
-  setValue("markupAppliedOn", d.markupAppliedOn);
-  setValue("markupType", d.markupType);
-  setValue("markupValue", d.markupValue);
-
-  const ds = onOff(d.isDiscountApply);
-  setPill("discountPill", ds.variant, ds.text);
-  setValue("discountEnabled", d.isDiscountApply === true ? "Yes" : d.isDiscountApply === false ? "No" : "");
-  setValue("discountAppliedOn", d.discountAppliedOn);
-  setValue("discountType", d.discountType);
-  setValue("discountValue", d.discountValue);
-
-  const cm = onOff(d.isCommissionApply);
-  setPill("commissionPill", cm.variant, cm.text);
-  setValue("commissionEnabled", d.isCommissionApply === true ? "Yes" : d.isCommissionApply === false ? "No" : "");
-  setValue("commissionAppliedOn", d.commissionAppliedOn);
-  setValue("commissionType", d.commissionType);
-  setValue("commissionValue", d.commissionValue);
-
-  const src = (d.commissionSource && String(d.commissionSource).trim()) ? String(d.commissionSource).trim() : "";
-  $("commissionSourceInline").textContent = src ? `(${src})` : "";
-
-  toggleAirlineCodeRow(d.commissionAirlineCode);
-  setValue("commissionAirlineCode", d.commissionAirlineCode ?? "");
-}
-
-function resetDefaultsUiOnly(){
-  $("airline").value = "BG";
-  $("segOrigin").value = "DAC";
-  $("segDestination").value = "CXB";
-  $("segDate").value = "2025-12-30";
-
-  $("empty").textContent = "No preview loaded.";
-  setPill("resultPill", "", "No data");
-  $("commissionSourceInline").textContent = "";
-  renderCards(null);
-}
-
-async function resetAll(){
-  resetDefaultsUiOnly();
-  await Promise.all([loadPartners(), loadGroups(), loadJourneyTypes()]);
-}
-
-$("btnReset").addEventListener("click", () => {
-  toast("warn", "Reset", "Filters restored to defaults.");
-  resetAll();
-});
-
-$("btnSubmit").addEventListener("click", async () => {
-  setSubmitting(true);
-  setPill("resultPill", "warn", "Loading…");
-
-  const payload = buildPayload();
-
-  try{
-    const response = await callPreview(payload);
-    if (response?.isSuccess){
-      renderCards(response.data);
-      toast("ok", "Preview loaded", "Pricing preview retrieved successfully.");
-    } else {
-      renderCards(null);
-      setPill("resultPill", "bad", "Failed");
-      $("empty").textContent = response?.message || "Request failed.";
-      toast("bad", "Request failed", response?.message || "Unable to load preview.");
+        const text = await res.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            return {isSuccess: false, statusCode: String(res.status), message: "Non-JSON response"};
+        }
     }
-  } catch (err){
-    renderCards(null);
-    setPill("resultPill", "bad", "Error");
-    $("empty").textContent = "Error: " + (err?.message || "Unknown");
-    toast("bad", "Error", err?.message || "Unknown error.");
-  } finally {
-    setSubmitting(false);
-  }
-});
 
-resetAll();
+    function mapEnum(value, map) {
+        if (value === null || value === undefined) return "";
+        const n = Number(value);
+        return (map[n] !== undefined) ? map[n] : String(value);
+    }
+
+    function formatValue(typeLabel, rawValue) {
+        if (rawValue === null || rawValue === undefined) return "";
+        const n = Number(rawValue);
+        const printable = Number.isFinite(n) ? String(n) : String(rawValue);
+        return (typeLabel === "Percentage") ? (printable + "%") : printable;
+    }
+
+    function setValue(id, v) {
+        $(id).textContent = (v === null || v === undefined) ? "" : String(v);
+    }
+
+    function onOff(enabled) {
+        if (enabled === true) return {variant: "ok", text: "Yes"};
+        if (enabled === false) return {variant: "bad", text: "No"};
+        return {variant: "", text: ""};
+    }
+
+    function normalize(data) {
+        if (!data || typeof data !== "object") return null;
+
+        const mkType = mapEnum(data.markupType, typeMap);
+        const dsType = mapEnum(data.discountType, typeMap);
+        const cmType = mapEnum(data.commissionType, typeMap);
+
+        return {
+            supplierName: data.supplierName ?? "",
+            supplierCode: data.supplierShortCode ?? "",
+            supplierCurrency: data.supplierCurrency ?? "",
+
+            isMarkupApply: data.isMarkupApply,
+            markupType: mkType,
+            markupValue: formatValue(mkType, data.markupValue),
+            markupAppliedOn: mapEnum(data.markupAppliedOn, appliedOnMap),
+
+            isDiscountApply: data.isDiscountApply,
+            discountType: dsType,
+            discountValue: formatValue(dsType, data.discountValue),
+            discountAppliedOn: mapEnum(data.discountAppliedOn, appliedOnMap),
+
+            isCommissionApply: data.isCommissionApply,
+            commissionSource: data.commissionSource ?? "",
+            commissionAirlineCode: data.commissionAirlineCode,
+            commissionType: cmType,
+            commissionValue: formatValue(cmType, data.commissionValue),
+            commissionAppliedOn: mapEnum(data.commissionAppliedOn, appliedOnMap)
+        };
+    }
+
+    function toggleAirlineCodeRow(value) {
+        const row = $("airlineCodeRow");
+        const hasValue = value !== null && value !== undefined && String(value).trim() !== "";
+        row.classList.toggle("hiddenRow", !hasValue);
+    }
+
+    function renderCards(data) {
+        if (!data) {
+            showResults(false);
+            setPill("resultPill", "", "No data");
+            $("commissionSourceInline").textContent = "";
+            toggleAirlineCodeRow(null);
+            setValue("commissionAirlineCode", "");
+            return;
+        }
+
+        const d = normalize(data);
+        showResults(true);
+        setPill("resultPill", "ok", "Loaded");
+
+        setValue("supplierName", d.supplierName);
+        setValue("supplierCode", d.supplierCode);
+        setValue("supplierCurrency", d.supplierCurrency);
+        setPill("supplierPill", "ok", (d.supplierName || d.supplierCode) ? "Ready" : "");
+
+        const mk = onOff(d.isMarkupApply);
+        setPill("markupPill", mk.variant, mk.text);
+        setValue("markupEnabled", d.isMarkupApply === true ? "Yes" : d.isMarkupApply === false ? "No" : "");
+        setValue("markupAppliedOn", d.markupAppliedOn);
+        setValue("markupType", d.markupType);
+        setValue("markupValue", d.markupValue);
+
+        const ds = onOff(d.isDiscountApply);
+        setPill("discountPill", ds.variant, ds.text);
+        setValue("discountEnabled", d.isDiscountApply === true ? "Yes" : d.isDiscountApply === false ? "No" : "");
+        setValue("discountAppliedOn", d.discountAppliedOn);
+        setValue("discountType", d.discountType);
+        setValue("discountValue", d.discountValue);
+
+        const cm = onOff(d.isCommissionApply);
+        setPill("commissionPill", cm.variant, cm.text);
+        setValue("commissionEnabled", d.isCommissionApply === true ? "Yes" : d.isCommissionApply === false ? "No" : "");
+        setValue("commissionAppliedOn", d.commissionAppliedOn);
+        setValue("commissionType", d.commissionType);
+        setValue("commissionValue", d.commissionValue);
+
+        const src = (d.commissionSource && String(d.commissionSource).trim()) ? String(d.commissionSource).trim() : "";
+        $("commissionSourceInline").textContent = src ? `(${src})` : "";
+
+        toggleAirlineCodeRow(d.commissionAirlineCode);
+        setValue("commissionAirlineCode", d.commissionAirlineCode ?? "");
+    }
+
+    function resetDefaultsUiOnly() {
+        $("airline").value = "BG";
+        $("segOrigin").value = "DAC";
+        $("segDestination").value = "CXB";
+        $("segDate").value = "2025-12-30";
+
+        $("empty").textContent = "No preview loaded.";
+        setPill("resultPill", "", "No data");
+        $("commissionSourceInline").textContent = "";
+        renderCards(null);
+    }
+
+    async function resetAll() {
+        resetDefaultsUiOnly();
+        await Promise.all([loadPartners(), loadGroups(), loadJourneyTypes()]);
+    }
+
+    $("btnReset").addEventListener("click", () => {
+        toast("warn", "Reset", "Filters restored to defaults.");
+        resetAll();
+    });
+
+    $("btnSubmit").addEventListener("click", async () => {
+        setSubmitting(true);
+        setPill("resultPill", "warn", "Loading…");
+
+        const payload = buildPayload();
+
+        try {
+            const response = await callPreview(payload);
+            if (response?.isSuccess) {
+                renderCards(response.data);
+                toast("ok", "Preview loaded", "Pricing preview retrieved successfully.");
+            } else {
+                renderCards(null);
+                setPill("resultPill", "bad", "Failed");
+                $("empty").textContent = response?.message || "Request failed.";
+                toast("bad", "Request failed", response?.message || "Unable to load preview.");
+            }
+        } catch (err) {
+            renderCards(null);
+            setPill("resultPill", "bad", "Error");
+            $("empty").textContent = "Error: " + (err?.message || "Unknown");
+            toast("bad", "Error", err?.message || "Unknown error.");
+        } finally {
+            setSubmitting(false);
+        }
+    });
+
+    resetAll();
 
 </script>
 
