@@ -845,3 +845,32 @@ html,body{
     background:#ff4b4b;
     box-shadow:0 0 14px rgba(255,75,75,.9);
 }
+
+/* =========================================================
+   MIND-DRIFT MOVEMENT SYSTEM
+========================================================= */
+
+.driftUnit{
+    position:relative;
+    animation:driftPath 26s linear infinite, driftTilt 9s ease-in-out infinite;
+    will-change:transform;
+    z-index:3;
+}
+
+@keyframes driftPath{
+    0%   { transform:translate(-28%, -18%); }
+    15%  { transform:translate(10%, -26%); }
+    30%  { transform:translate(32%, -4%); }
+    45%  { transform:translate(18%, 26%); }
+    60%  { transform:translate(-10%, 32%); }
+    75%  { transform:translate(-32%, 4%); }
+    90%  { transform:translate(-12%, -22%); }
+    100% { transform:translate(-28%, -18%); }
+}
+
+@keyframes driftTilt{
+    0%   { transform:rotate(-0.6deg); }
+    50%  { transform:rotate(0.8deg); }
+    100% { transform:rotate(-0.6deg); }
+}
+
