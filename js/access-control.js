@@ -1,4 +1,8 @@
-const BASE = "https://akijair.ibos.io/user-management/v1/access-control";
+const ACCESS_BASE      = API.access.base;
+const ACCESS_MODE      = API.access.mode;
+const ACCESS_SWITCH    = API.access.switchMode;
+const ACCESS_RULES     = API.access.rules;
+const ACCESS_SINGLE    = API.access.single;
 
 if (!localStorage.getItem("accessToken")) location.href = "index.html";
 
@@ -18,7 +22,6 @@ function toast(title, msg){
     setTimeout(() => t.remove(), 2500);
 }
 
-/* ===== GLOBAL MODE ===== */
 function setModeHint(mode, allowAll){
     if (mode === "BLACKLIST" && allowAll) {
         modeHint.innerHTML = `
@@ -36,10 +39,10 @@ function setModeHint(mode, allowAll){
 }
 
 async function loadMode(){
-    const r = await fetch(BASE + "/mode", { headers:{ Authorization: token() }});
+    const r = await fetch(ACCESS_MODE, { headers:{ Authorization: token() }});
     const j = await r.json();
 
-    if(j?.isSuccess){
+    if (j?.isSuccess){
         const m = j.data.mode;
         const a = j.data.allowAll === true;
         modePill.className = "pill " + (m === "BLACKLIST" ? "bad" : "ok");
@@ -48,11 +51,10 @@ async function loadMode(){
     }
 }
 
-/* ===== RULES ===== */
 async function loadRules(){
-    const r = await fetch(BASE + "/all", { headers:{ Authorization: token() }});
+    const r = await fetch(ACCESS_RULES, { headers:{ Authorization: token() }});
     const j = await r.json();
-    if(!j?.isSuccess) return;
+    if (!j?.isSuccess) return;
 
     ruleTable.innerHTML = "";
     j.data.forEach(x => {
@@ -80,20 +82,20 @@ async function loadRules(){
 }
 
 window.toggleRule = async (id, isAllow) => {
-    await fetch(`${BASE}/${id}/${isAllow ? "block" : "allow"}`, {
+    await fetch(`${ACCESS_SINGLE(id)}/${isAllow ? "block" : "allow"}`, {
         method:"PUT",
         headers:{ Authorization: token() }
     });
+
     loadRules();
     toast("Updated", "Rule updated successfully");
 };
 
-/* ===== CREATE RULE ===== */
 btnCreateRule.onclick = () => modalBackdrop.style.display = "flex";
 btnCancel.onclick = () => modalBackdrop.style.display = "none";
 
 btnSubmitRule.onclick = async () => {
-    await fetch(BASE, {
+    await fetch(ACCESS_BASE, {
         method:"POST",
         headers:{
             Authorization: token(),
@@ -112,7 +114,6 @@ btnSubmitRule.onclick = async () => {
     toast("Created", "Rule added successfully");
 };
 
-/* ===== MODE SWITCH CONFIRM ===== */
 btnSwitchMode.onclick = () => {
     const current = modePill.textContent.trim();
     const next = current === "BLACKLIST" ? "WHITELIST" : "BLACKLIST";
@@ -151,7 +152,7 @@ btnCancelMode.onclick = () => {
 btnConfirmMode.onclick = async () => {
     modeConfirmBackdrop.style.display = "none";
 
-    await fetch(BASE + "/mode/switch", {
+    await fetch(ACCESS_SWITCH, {
         method:"PUT",
         headers:{ Authorization: token() }
     });
@@ -161,6 +162,5 @@ btnConfirmMode.onclick = async () => {
     toast("Mode Changed", "Global access mode updated");
 };
 
-/* ===== INIT ===== */
 loadMode();
 loadRules();

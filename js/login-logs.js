@@ -1,6 +1,6 @@
 if (!localStorage.getItem("accessToken")) location.href = "index.html";
 
-const BASE = "https://akijair.ibos.io/user-management/v1/auth/login-logs";
+const BASE = API.auth.logs;
 
 let page = 1;
 let size = 10;
@@ -20,7 +20,7 @@ async function loadPartners() {
     if (type === "failed") url += "/failed";
     url += `?pageNumber=${page}&pageSize=${size}`;
 
-    const r = await fetch(url, {headers: {Authorization: token()}});
+    const r = await fetch(url, { headers: { Authorization: token() }});
     const j = await r.json();
     if (!j?.isSuccess) return;
 
@@ -58,17 +58,21 @@ async function loadPartners() {
 async function toggleDetails(partnerId, btn) {
     const row = btn.parentElement.parentElement.nextElementSibling;
     row.style.display = row.style.display === "none" ? "table-row" : "none";
+
     if (row.dataset.loaded) return;
+
     await loadLogs(partnerId, 1, row);
     row.dataset.loaded = "1";
 }
 
 async function loadLogs(partnerId, logPage, containerRow) {
-    let url = `${BASE}/${partnerId}/logs?pageNumber=${logPage}&pageSize=10`;
+
+    let url = `${API.auth.partnerLogs(partnerId)}?pageNumber=${logPage}&pageSize=10`;
+
     if (type === "success") url += "&isSuccess=true";
     if (type === "failed") url += "&isSuccess=false";
 
-    const r = await fetch(url, {headers: {Authorization: token()}});
+    const r = await fetch(url, { headers: { Authorization: token() }});
     const j = await r.json();
     if (!j?.isSuccess) return;
 
@@ -117,40 +121,55 @@ async function loadLogs(partnerId, logPage, containerRow) {
           ${i}
         </button>`;
     }
+
     html += `</div>`;
 
     containerRow.querySelector("div").innerHTML = html;
 }
 
+/* ================= PAGINATION ================= */
+
 function renderPartnerPagination(total) {
     const host = $("partnerPagination");
     host.innerHTML = "";
+
     const pages = Math.ceil(total / size);
+
     for (let i = 1; i <= pages; i++) {
         const b = document.createElement("button");
         b.className = "pageBtn" + (i === page ? " active" : "");
         b.textContent = i;
+
         b.onclick = () => {
             page = i;
             loadPartners();
         };
+
         host.appendChild(b);
     }
 }
+
+/* ================= TABS ================= */
 
 document.querySelectorAll(".tab").forEach(t => {
     t.onclick = () => {
         document.querySelectorAll(".tab").forEach(a => a.classList.remove("active"));
         t.classList.add("active");
+
         type = t.dataset.type;
         page = 1;
+
         loadPartners();
     };
 });
+
+/* ================= LOGOUT ================= */
 
 document.getElementById("btnLogout").onclick = () => {
     localStorage.removeItem("accessToken");
     location.href = "index.html";
 };
+
+/* ================= INIT ================= */
 
 loadPartners();

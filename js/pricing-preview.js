@@ -11,12 +11,10 @@ btnLogout.onclick = () => {
     location.href = "index.html";
 };
 
-/* ================= PRICING API ================= */
-
-const PRICING_PREVIEW_URL = "https://akijair.ibos.io/configuration-management/v1/supplier-info/pricing/preview";
-const PARTNER_LOOKUP_URL = "https://akijair.ibos.io/user-management/v1/lookups/active-approved-b2b-partners";
-const GROUP_LOOKUP_URL = "https://akijair.ibos.io/configuration-management/v1/lookups/fmg-groups";
-const JOURNEY_LOOKUP_URL = "https://akijair.ibos.io/configuration-management/v1/lookups/journey-types";
+const PRICING_PREVIEW_URL = API.pricing.preview;
+const PARTNER_LOOKUP_URL  = API.lookups.partners;
+const GROUP_LOOKUP_URL    = API.lookups.groups;
+const JOURNEY_LOOKUP_URL  = API.lookups.journeys;
 
 const allowedJourneyCodes = new Set(["1", "2", "3"]);
 
